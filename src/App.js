@@ -33,7 +33,22 @@ class App extends Component {
   }
 
   getVocalization = (e) => {
-    console.log('Fetching vocalization...');
+    let startDate = this.state.startDate;
+    let endDate = this.state.endDate;
+    if (startDate !== null && endDate !== null) {
+      let startTimestamp = startDate.getTime() / 1000;
+      let endTimestamp = endDate.getTime() / 1000;
+      let url = `http://localhost:8080/query/timeseries?relationName=bitstampusd&startTime=${startTimestamp}&endTime=${endTimestamp}&timeColumnName=timestamp&variableColumnName=close`
+      fetch(url, {
+        headers: {
+          'Content-Type': 'text/plain'
+        }
+      }).then(response => {
+        response.text().then(text => {
+          this.setState({ vocalization: text });
+        });
+      });
+    }
   }
 
   render() {
