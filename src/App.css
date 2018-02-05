@@ -2,5 +2,10 @@
   text-align: center;
 }
 
+.App-logo {
+  margin: "10px";
+  height: 5vmin;
+}
+
 @import '../node_modules/@blueprintjs/core/dist/blueprint.css';
 @import '../node_modules/@blueprintjs/datetime/dist/blueprint-datetime.css';

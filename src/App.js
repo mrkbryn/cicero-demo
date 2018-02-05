@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import './App.css';
+import logo from './cornell_logo.svg';
 import {
   Navbar,
   NavbarGroup,
@@ -74,6 +75,15 @@ class App extends Component {
     });
   }
 
+  playVoiceOutput(e) {
+    console.log('Playing voice output...');
+    // var msg = new SpeechSynthesisUtterance();
+    // msg.text = this.state.vocalization.result;
+    // msg.lang = 'en-US';
+    // window.speechSynthesis.speak(msg);
+    // console.log('done speaking...');
+  }
+
   render() {
     return (
       <div className="App">
@@ -124,13 +134,31 @@ class App extends Component {
               </div>
 
               <div className="row" style={{ margin: "40px"}}>
-                <Button className="pt-intent-success pt-icon-play" style={{ margin: "10px"}}>Play Voice Output</Button>
-                <Button className="pt-intent-danger pt-icon-pause" style={{ margin: "10px"}}>Pause Voice Output</Button>
+                <Button
+                  className="pt-intent-success pt-icon-play"
+                  style={{ margin: "10px"}}
+                  onClick={this.playVoiceOutput}
+                >
+                  Play Voice Output
+                </Button>
+                <Button
+                  className="pt-intent-danger pt-icon-pause"
+                  style={{ margin: "10px"}}
+                >
+                  Pause Voice Output
+                </Button>
               </div>
             </div>
           }
 
         </div>
+        <footer className="navbar-fixed-bottom">
+					<div className="container">
+						<div className="row" style={{ margin: "10px"}}>
+							Made by Cornell Database Group | <img className="App-logo" src={logo} alt="Cornell University" />
+						</div>
+					</div>
+				</footer>
       </div>
     );
   }
