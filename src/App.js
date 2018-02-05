@@ -6,6 +6,9 @@ import {
   NavbarHeading,
   Button,
   RangeSlider,
+  Spinner,
+  NonIdealState,
+  Tag,
 } from '@blueprintjs/core';
 
 class App extends Component {
@@ -15,7 +18,9 @@ class App extends Component {
       minimumTimestamp: 1325317920,
       maximiumTimestamp: 1515369600,
       range: [0,100],
-      vocalization: 'Select dates and run vocalization to see the output here.'
+      vocalization: {
+        fetching: false,
+      }
     }
   }
 
@@ -44,15 +49,29 @@ class App extends Component {
   }
 
   getVocalization = (e) => {
+    this.setState({
+      vocalization: {
+        fetching: true
+      }
+    });
     let url = `http://localhost:8080/query/timeseries?relationName=bitstampusd&startTime=${this.getLeftTimestamp()}&endTime=${this.getRightTimestamp()}&timeColumnName=timestamp&variableColumnName=close`
     fetch(url, {
-      headers: {
+      method: 'GET',
+      headers: new Headers({
         'Content-Type': 'text/plain'
+      })
+    })
+    .then(response => {
+      if (response.ok) {
+        return response.text();
       }
-    }).then(response => {
-      response.text().then(text => {
-        this.setState({ vocalization: text });
-      });
+      throw new Error('Failed to fetch vocalization');
+    })
+    .then(response => {
+      this.setState({ vocalization: { fetching: false, result: response }});
+    })
+    .catch(error => {
+      this.setState({ vocalization: { fetching: false, error: error.message }})
     });
   }
 
@@ -82,12 +101,36 @@ class App extends Component {
           </div>
 
           <div className="row" style={{ margin: "10px"}}>
-            <Button onClick={this.getVocalization}>Get Vocalization</Button>
+            <Button disabled={this.state.vocalization.fetching} onClick={this.getVocalization}>Get Vocalization</Button>
           </div>
 
-          <div>
-            {this.state.vocalization}
-          </div>
+          {this.state.vocalization.fetching &&
+            <Spinner className="pt-large row" />
+          }
+
+          {this.state.vocalization.error &&
+            <div className="row" style={{ margin: "40px"}}>
+              <NonIdealState
+                visual="error"
+                title="Oops! We had an issue while building a voice response"
+                description={this.state.vocalization.error}
+              />
+            </div>
+          }
+
+          {this.state.vocalization.result &&
+            <div className="vocalization-result">
+              <div className="row" style={{ margin: "40px"}}>
+                <h4>{this.state.vocalization.result}</h4>
+              </div>
+
+              <div className="row" style={{ margin: "40px"}}>
+                <Button className="pt-intent-success pt-icon-play" style={{ margin: "10px"}}>Play Voice Output</Button>
+                <Button className="pt-intent-danger pt-icon-pause" style={{ margin: "10px"}}>Pause Voice Output</Button>
+              </div>
+            </div>
+          }
+
         </div>
       </div>
     );
