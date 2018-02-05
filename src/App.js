@@ -5,50 +5,49 @@ import {
   NavbarGroup,
   NavbarHeading,
   Button,
+  RangeSlider,
 } from '@blueprintjs/core';
-import { DateRangePicker } from '@blueprintjs/datetime';
-import {
-  ButtonGroup
-} from 'react-bootstrap';
 
 class App extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      startDate: null,
-      endDate: null,
+      minimumTimestamp: 1325317920,
+      maximiumTimestamp: 1515369600,
+      range: [0,100],
       vocalization: 'Select dates and run vocalization to see the output here.'
     }
   }
 
-  handleTableSelection = (e) => {
-    console.log(e);
+  getLeftTimestamp() {
+    let timeRange = this.state.maximiumTimestamp - this.state.minimumTimestamp;
+    let leftTimestamp = (this.state.range[0] / 100) * timeRange + this.state.minimumTimestamp;
+    return Math.round(leftTimestamp);
   }
 
-  handleDateChange = (selectedDates) => {
+  getRightTimestamp() {
+    let timeRange = this.state.maximiumTimestamp - this.state.minimumTimestamp;
+    let rightTimestamp = (this.state.range[1] / 100) * timeRange + this.state.minimumTimestamp;
+    return Math.round(rightTimestamp);
+  }
+
+  handleValueChange = (values) => {
     this.setState({
-        startDate: selectedDates[0],
-        endDate: selectedDates[1]
+      range: values
     })
   }
 
   getVocalization = (e) => {
-    let startDate = this.state.startDate;
-    let endDate = this.state.endDate;
-    if (startDate !== null && endDate !== null) {
-      let startTimestamp = startDate.getTime() / 1000;
-      let endTimestamp = endDate.getTime() / 1000;
-      let url = `http://localhost:8080/query/timeseries?relationName=bitstampusd&startTime=${startTimestamp}&endTime=${endTimestamp}&timeColumnName=timestamp&variableColumnName=close`
-      fetch(url, {
-        headers: {
-          'Content-Type': 'text/plain'
-        }
-      }).then(response => {
-        response.text().then(text => {
-          this.setState({ vocalization: text });
-        });
+    let url = `http://localhost:8080/query/timeseries?relationName=bitstampusd&startTime=${this.getLeftTimestamp()}&endTime=${this.getRightTimestamp()}&timeColumnName=timestamp&variableColumnName=close`
+    fetch(url, {
+      headers: {
+        'Content-Type': 'text/plain'
+      }
+    }).then(response => {
+      response.text().then(text => {
+        this.setState({ vocalization: text });
       });
-    }
+    });
   }
 
   render() {
@@ -56,22 +55,24 @@ class App extends Component {
       <div className="App">
         <Navbar>
           <NavbarGroup>
-              <NavbarHeading>Cicero - Time Series</NavbarHeading>
+              <NavbarHeading>Cicero - Time Series Vocalization</NavbarHeading>
           </NavbarGroup>
         </Navbar>
 
         <div className="container">
-          <ButtonGroup>
-            <Button onClick={this.handleTableSelection}>bitstampusd</Button>
-            <Button onClick={this.handleTableSelection}>coinbaseusd</Button>
-            <Button onClick={this.handleTableSelection}>sensor</Button>
-          </ButtonGroup>
+          <div className="row">
+            <RangeSlider
+              min={0}
+              max={100}
+              stepSize={1}
+              labelStepSize={10}
+              onChange={this.handleValueChange}
+              value={this.state.range}
+            />
+          </div>
 
           <div className="row">
-            <DateRangePicker
-              value={[this.state.startDate, this.state.endDate]}
-              onChange={this.handleDateChange}
-            />
+            {`Timestamp range: ${this.getLeftTimestamp()} to ${this.getRightTimestamp()}`}
           </div>
 
           <div className="row">
