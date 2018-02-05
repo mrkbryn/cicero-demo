@@ -8,7 +8,6 @@ import {
   RangeSlider,
   Spinner,
   NonIdealState,
-  Tag,
 } from '@blueprintjs/core';
 
 class App extends Component {
