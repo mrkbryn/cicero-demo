@@ -31,6 +31,12 @@ class App extends Component {
     return Math.round(rightTimestamp);
   }
 
+  getDateRangeDisplay() {
+    let leftDate = new Date(this.getLeftTimestamp() * 1000);
+    let rightDate = new Date(this.getRightTimestamp() * 1000);
+    return `From ${leftDate} to ${rightDate}`
+  }
+
   handleValueChange = (values) => {
     this.setState({
       range: values
@@ -60,7 +66,7 @@ class App extends Component {
         </Navbar>
 
         <div className="container">
-          <div className="row">
+          <div className="row" style={{ margin: "20px"}}>
             <RangeSlider
               min={0}
               max={100}
@@ -71,11 +77,11 @@ class App extends Component {
             />
           </div>
 
-          <div className="row">
-            {`Timestamp range: ${this.getLeftTimestamp()} to ${this.getRightTimestamp()}`}
+          <div className="row" style={{ margin: "10px"}}>
+            {this.getDateRangeDisplay()}
           </div>
 
-          <div className="row">
+          <div className="row" style={{ margin: "10px"}}>
             <Button onClick={this.getVocalization}>Get Vocalization</Button>
           </div>
 
