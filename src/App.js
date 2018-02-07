@@ -54,7 +54,7 @@ class App extends Component {
         fetching: true
       }
     });
-    let url = `http://localhost:8080/query/timeseries?relationName=bitstampusd&startTime=${this.getLeftTimestamp()}&endTime=${this.getRightTimestamp()}&timeColumnName=timestamp&variableColumnName=close`
+    let url = `https://cicero-2.herokuapp.com/query/timeseries?relationName=bitstampusd&startTime=${this.getLeftTimestamp()}&endTime=${this.getRightTimestamp()}&timeColumnName=timestamp&variableColumnName=close`
     fetch(url, {
       method: 'GET',
       headers: new Headers({
