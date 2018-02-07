@@ -65,6 +65,7 @@ class App extends Component {
       if (response.ok) {
         return response.text();
       }
+      console.log(response.error);
       throw new Error('Failed to fetch vocalization');
     })
     .then(response => {
@@ -75,13 +76,10 @@ class App extends Component {
     });
   }
 
-  playVoiceOutput(e) {
-    console.log('Playing voice output...');
-    // var msg = new SpeechSynthesisUtterance();
-    // msg.text = this.state.vocalization.result;
-    // msg.lang = 'en-US';
-    // window.speechSynthesis.speak(msg);
-    // console.log('done speaking...');
+  playVoiceOutput(msg) {
+    var synth = window.speechSynthesis;
+    var voiceOutput = new SpeechSynthesisUtterance(msg);
+    synth.speak(voiceOutput);
   }
 
   render() {
@@ -137,7 +135,7 @@ class App extends Component {
                 <Button
                   className="pt-intent-success pt-icon-play"
                   style={{ margin: "10px"}}
-                  onClick={this.playVoiceOutput}
+                  onClick={() => this.playVoiceOutput(this.state.vocalization.result)}
                 >
                   Play Voice Output
                 </Button>
