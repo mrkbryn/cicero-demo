@@ -9,8 +9,9 @@ import {
   RangeSlider,
   Spinner,
   NonIdealState,
+  Switch,
 } from '@blueprintjs/core';
-import { Row } from 'react-bootstrap';
+import { Row, Col } from 'react-bootstrap';
 
 const monthDisplays = ["Jan", "Feb", "March", "Apr", "May", "Jun", "Jul", "Aug", "Sept", "Oct", "Nov", "Dec"];
 
@@ -18,6 +19,7 @@ class App extends Component {
   constructor(props) {
     super(props);
     this.state = {
+      voiceMode: true,
       minimumTimestamp: 1325317920,
       maximiumTimestamp: 1515369600,
       range: [0,100],
@@ -25,6 +27,10 @@ class App extends Component {
         fetching: false,
       }
     }
+  }
+
+  componentDidMount() {
+    window.speechSynthesis.getVoices();
   }
 
   getLeftTimestamp() {
@@ -58,6 +64,10 @@ class App extends Component {
     return `${monthDisplays[date.getMonth()]} ${date.getFullYear()}`;
   }
 
+  toggleVoiceMode = () => {
+    this.setState({ voiceMode: !this.state.voiceMode })
+  }
+
   getVocalization = (e) => {
     this.setState({
       vocalization: {
@@ -80,6 +90,9 @@ class App extends Component {
     })
     .then(response => {
       this.setState({ vocalization: { fetching: false, result: response }});
+      if (this.state.voiceMode) {
+        this.playVoiceOutput(response);
+      }
     })
     .catch(error => {
       this.setState({ vocalization: { fetching: false, error: error.message }})
@@ -88,7 +101,14 @@ class App extends Component {
 
   playVoiceOutput(msg) {
     var synth = window.speechSynthesis;
+    var voices = synth.getVoices();
     var voiceOutput = new SpeechSynthesisUtterance(msg);
+    for (var i = 0; i < voices.length; i++) {
+      if (voices[i].voiceURI === 'Google UK English Female') {
+        voiceOutput.voice = voices[i];
+        break;
+      }
+    }
     synth.speak(voiceOutput);
   }
 
@@ -103,23 +123,32 @@ class App extends Component {
 
         <div className="container">
           <Row style={{ margin: "20px"}}>
-            <RangeSlider
-              min={0}
-              max={100}
-              stepSize={1}
-              labelStepSize={10}
-              onChange={this.handleValueChange}
-              value={this.state.range}
-              renderLabel={this.renderSliderLabel}
-            />
+            <Col md={12}>
+              <RangeSlider
+                min={0}
+                max={100}
+                stepSize={1}
+                labelStepSize={10}
+                onChange={this.handleValueChange}
+                value={this.state.range}
+                renderLabel={this.renderSliderLabel}
+              />
+            </Col>
           </Row>
 
           <Row style={{ margin: "10px"}}>
-            {this.getDateRangeDisplay()}
+            <Col md={12}>
+              {this.getDateRangeDisplay()}
+            </Col>
           </Row>
 
           <Row style={{ margin: "10px"}}>
-            <Button disabled={this.state.vocalization.fetching} onClick={this.getVocalization}>Get Vocalization</Button>
+            <Col md={6}>
+              <Button disabled={this.state.vocalization.fetching} onClick={this.getVocalization}>Get Vocalization</Button>
+            </Col>
+            <Col md={6}>
+              <Switch checked={this.state.voiceMode} onChange={this.toggleVoiceMode} label="Voice Mode" />
+            </Col>
           </Row>
 
           {this.state.vocalization.fetching &&
@@ -130,32 +159,36 @@ class App extends Component {
             <Row style={{ margin: "40px"}}>
               <NonIdealState
                 visual="error"
-                title="Oops! We had an issue while building a voice response"
+                title="Oops! We had an issue while building a voice response."
                 description={this.state.vocalization.error}
               />
             </Row>
           }
 
-          {this.state.vocalization.result &&
+          {this.state.vocalization.result && !this.state.voiceMode &&
             <div className="vocalization-result">
               <Row style={{ margin: "40px"}}>
-                <h4>{this.state.vocalization.result}</h4>
+                <Col md={12}>
+                  <h4>{this.state.vocalization.result}</h4>
+                </Col>
               </Row>
 
               <Row style={{ margin: "40px"}}>
-                <Button
-                  className="pt-intent-success pt-icon-play"
-                  style={{ margin: "10px"}}
-                  onClick={() => this.playVoiceOutput(this.state.vocalization.result)}
-                >
-                  Play Voice Output
-                </Button>
-                <Button
-                  className="pt-intent-danger pt-icon-pause"
-                  style={{ margin: "10px"}}
-                >
-                  Pause Voice Output
-                </Button>
+                <Col md={12}>
+                  <Button
+                    className="pt-intent-success pt-icon-play"
+                    style={{ margin: "10px"}}
+                    onClick={() => this.playVoiceOutput(this.state.vocalization.result)}
+                  >
+                    Play Voice Output
+                  </Button>
+                  <Button
+                    className="pt-intent-danger pt-icon-pause"
+                    style={{ margin: "10px"}}
+                  >
+                    Pause Voice Output
+                  </Button>
+                </Col>
               </Row>
             </div>
           }
@@ -165,7 +198,9 @@ class App extends Component {
         <footer className="navbar-fixed-bottom">
 					<div className="container">
 						<Row style={{ margin: "10px"}}>
+              <Col md={12}>
 							Cornell Database Group | <img className="App-logo" src={logo} alt="Cornell University" />
+              </Col>
 						</Row>
 					</div>
 				</footer>
