@@ -45,12 +45,6 @@ class App extends Component {
     return Math.round(rightTimestamp);
   }
 
-  getDateRangeDisplay() {
-    let leftDate = new Date(this.getLeftTimestamp() * 1000);
-    let rightDate = new Date(this.getRightTimestamp() * 1000);
-    return `From ${monthDisplays[leftDate.getMonth()]} ${leftDate.getFullYear()} to ${monthDisplays[rightDate.getMonth()]} ${rightDate.getFullYear()}`
-  }
-
   handleValueChange = (values) => {
     this.setState({
       range: values
@@ -133,12 +127,6 @@ class App extends Component {
                 value={this.state.range}
                 renderLabel={this.renderSliderLabel}
               />
-            </Col>
-          </Row>
-
-          <Row style={{ margin: "10px"}}>
-            <Col md={12}>
-              {this.getDateRangeDisplay()}
             </Col>
           </Row>
 
