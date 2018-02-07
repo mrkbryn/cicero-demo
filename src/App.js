@@ -10,6 +10,9 @@ import {
   Spinner,
   NonIdealState,
 } from '@blueprintjs/core';
+import { Row } from 'react-bootstrap';
+
+const monthDisplays = ["Jan", "Feb", "March", "Apr", "May", "Jun", "Jul", "Aug", "Sept", "Oct", "Nov", "Dec"];
 
 class App extends Component {
   constructor(props) {
@@ -39,13 +42,20 @@ class App extends Component {
   getDateRangeDisplay() {
     let leftDate = new Date(this.getLeftTimestamp() * 1000);
     let rightDate = new Date(this.getRightTimestamp() * 1000);
-    return `From ${leftDate} to ${rightDate}`
+    return `From ${monthDisplays[leftDate.getMonth()]} ${leftDate.getFullYear()} to ${monthDisplays[rightDate.getMonth()]} ${rightDate.getFullYear()}`
   }
 
   handleValueChange = (values) => {
     this.setState({
       range: values
     })
+  }
+
+  renderSliderLabel = (value) => {
+    let timeRange = this.state.maximiumTimestamp - this.state.minimumTimestamp;
+    let timestamp = Math.round(this.state.minimumTimestamp + ((value / 100) * timeRange));
+    let date = new Date(timestamp * 1000);
+    return `${monthDisplays[date.getMonth()]} ${date.getFullYear()}`;
   }
 
   getVocalization = (e) => {
@@ -92,7 +102,7 @@ class App extends Component {
         </Navbar>
 
         <div className="container">
-          <div className="row" style={{ margin: "20px"}}>
+          <Row style={{ margin: "20px"}}>
             <RangeSlider
               min={0}
               max={100}
@@ -100,38 +110,39 @@ class App extends Component {
               labelStepSize={10}
               onChange={this.handleValueChange}
               value={this.state.range}
+              renderLabel={this.renderSliderLabel}
             />
-          </div>
+          </Row>
 
-          <div className="row" style={{ margin: "10px"}}>
+          <Row style={{ margin: "10px"}}>
             {this.getDateRangeDisplay()}
-          </div>
+          </Row>
 
-          <div className="row" style={{ margin: "10px"}}>
+          <Row style={{ margin: "10px"}}>
             <Button disabled={this.state.vocalization.fetching} onClick={this.getVocalization}>Get Vocalization</Button>
-          </div>
+          </Row>
 
           {this.state.vocalization.fetching &&
             <Spinner className="pt-large row" />
           }
 
           {this.state.vocalization.error &&
-            <div className="row" style={{ margin: "40px"}}>
+            <Row style={{ margin: "40px"}}>
               <NonIdealState
                 visual="error"
                 title="Oops! We had an issue while building a voice response"
                 description={this.state.vocalization.error}
               />
-            </div>
+            </Row>
           }
 
           {this.state.vocalization.result &&
             <div className="vocalization-result">
-              <div className="row" style={{ margin: "40px"}}>
+              <Row style={{ margin: "40px"}}>
                 <h4>{this.state.vocalization.result}</h4>
-              </div>
+              </Row>
 
-              <div className="row" style={{ margin: "40px"}}>
+              <Row style={{ margin: "40px"}}>
                 <Button
                   className="pt-intent-success pt-icon-play"
                   style={{ margin: "10px"}}
@@ -145,16 +156,17 @@ class App extends Component {
                 >
                   Pause Voice Output
                 </Button>
-              </div>
+              </Row>
             </div>
           }
 
         </div>
+
         <footer className="navbar-fixed-bottom">
 					<div className="container">
-						<div className="row" style={{ margin: "10px"}}>
-							Made by Cornell Database Group | <img className="App-logo" src={logo} alt="Cornell University" />
-						</div>
+						<Row style={{ margin: "10px"}}>
+							Cornell Database Group | <img className="App-logo" src={logo} alt="Cornell University" />
+						</Row>
 					</div>
 				</footer>
       </div>
