@@ -131,11 +131,14 @@ class App extends Component {
           </Row>
 
           <Row style={{ margin: "10px"}}>
-            <Col md={6}>
+            <Col md={12}>
               <Button disabled={this.state.vocalization.fetching} onClick={this.getVocalization}>Get Vocalization</Button>
             </Col>
-            <Col md={6}>
-              <Switch checked={this.state.voiceMode} onChange={this.toggleVoiceMode} label="Voice Mode" />
+          </Row>
+
+          <Row style={{ width: "170px" }}>
+            <Col md={12}>
+              <Switch className="pt-large" checked={this.state.voiceMode} onChange={this.toggleVoiceMode} label="Voice Mode" />
             </Col>
           </Row>
 
@@ -169,12 +172,6 @@ class App extends Component {
                     onClick={() => this.playVoiceOutput(this.state.vocalization.result)}
                   >
                     Play Voice Output
-                  </Button>
-                  <Button
-                    className="pt-intent-danger pt-icon-pause"
-                    style={{ margin: "10px"}}
-                  >
-                    Pause Voice Output
                   </Button>
                 </Col>
               </Row>
