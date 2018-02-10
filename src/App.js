@@ -9,6 +9,7 @@ import {
 } from '@blueprintjs/core';
 import { Row, Col } from 'react-bootstrap';
 import CiceroNavbar from './CiceroNavbar';
+import IntroductionComponent from './IntroductionComponent';
 import Footer from './Footer';
 
 const monthDisplays = [
@@ -114,6 +115,8 @@ class App extends Component {
         <CiceroNavbar />
 
         <div className="container">
+          <IntroductionComponent />
+
           <Row style={{ margin: "20px"}}>
             <Col md={12}>
               <RangeSlider
