@@ -3,5 +3,9 @@
   height: 5vmin;
 }
 
+.App-config {
+  margin: "50px";
+}
+
 @import '../node_modules/@blueprintjs/core/dist/blueprint.css';
 @import '../node_modules/@blueprintjs/datetime/dist/blueprint-datetime.css';

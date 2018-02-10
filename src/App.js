@@ -5,12 +5,12 @@ import {
   RangeSlider,
   Spinner,
   NonIdealState,
-  Switch,
 } from '@blueprintjs/core';
 import { Row, Col } from 'react-bootstrap';
 import CiceroNavbar from './CiceroNavbar';
 import IntroductionComponent from './IntroductionComponent';
 import Footer from './Footer';
+import ConfigPanel from './ConfigPanel';
 
 const monthDisplays = [
   "Jan", "Feb", "March", "Apr", "May",
@@ -23,6 +23,7 @@ class App extends Component {
     super(props);
     this.state = {
       voiceMode: true,
+      samplingAlgorithm: true,
       minimumTimestamp: 1325317920,
       maximiumTimestamp: 1515369600,
       range: [0,100],
@@ -62,7 +63,11 @@ class App extends Component {
   }
 
   toggleVoiceMode = () => {
-    this.setState({ voiceMode: !this.state.voiceMode })
+    this.setState({ voiceMode: !this.state.voiceMode });
+  }
+
+  toggleSamplingMethod = () => {
+    this.setState({ samplingAlgorithm: !this.state.samplingAlgorithm });
   }
 
   getVocalization = (e) => {
@@ -116,8 +121,14 @@ class App extends Component {
 
         <div className="container">
           <IntroductionComponent />
+          <ConfigPanel
+            voiceMode={this.state.voiceMode}
+            toggleVoiceMode={this.toggleVoiceMode}
+            samplingAlgorithm={this.state.samplingAlgorithm}
+            toggleSamplingMethod={this.toggleSamplingMethod}
+          />
 
-          <Row style={{ margin: "20px"}}>
+          <Row style={{ margin: "40px"}}>
             <Col md={12}>
               <RangeSlider
                 min={0}
@@ -131,15 +142,14 @@ class App extends Component {
             </Col>
           </Row>
 
-          <Row style={{ margin: "10px"}}>
+          <Row style={{ margin: "10px", "text-align": "center" }}>
             <Col md={12}>
-              <Button disabled={this.state.vocalization.fetching} onClick={this.getVocalization}>Get Vocalization</Button>
-            </Col>
-          </Row>
-
-          <Row style={{ width: "170px" }}>
-            <Col md={12}>
-              <Switch className="pt-large" checked={this.state.voiceMode} onChange={this.toggleVoiceMode} label="Voice Mode" />
+              <Button
+                disabled={this.state.vocalization.fetching}
+                onClick={this.getVocalization}
+              >
+                Get Vocalization
+              </Button>
             </Col>
           </Row>
 
