@@ -1,10 +1,6 @@
 import React, { Component } from 'react';
 import './App.css';
-import logo from './cornell_logo.svg';
 import {
-  Navbar,
-  NavbarGroup,
-  NavbarHeading,
   Button,
   RangeSlider,
   Spinner,
@@ -12,8 +8,14 @@ import {
   Switch,
 } from '@blueprintjs/core';
 import { Row, Col } from 'react-bootstrap';
+import CiceroNavbar from './CiceroNavbar';
+import Footer from './Footer';
 
-const monthDisplays = ["Jan", "Feb", "March", "Apr", "May", "Jun", "Jul", "Aug", "Sept", "Oct", "Nov", "Dec"];
+const monthDisplays = [
+  "Jan", "Feb", "March", "Apr", "May",
+  "Jun", "Jul", "Aug", "Sept", "Oct",
+  "Nov", "Dec"
+];
 
 class App extends Component {
   constructor(props) {
@@ -68,7 +70,7 @@ class App extends Component {
         fetching: true
       }
     });
-    let url = `https://cicero-2.herokuapp.com/query/timeseries?relationName=bitstampusd&startTime=${this.getLeftTimestamp()}&endTime=${this.getRightTimestamp()}&timeColumnName=timestamp&variableColumnName=close`
+    let url = `http://localhost:8080/query/timeseries?relationName=bitstampusd&startTime=${this.getLeftTimestamp()}&endTime=${this.getRightTimestamp()}&timeColumnName=timestamp&variableColumnName=close`
     fetch(url, {
       method: 'GET',
       headers: new Headers({
@@ -109,11 +111,7 @@ class App extends Component {
   render() {
     return (
       <div className="App">
-        <Navbar>
-          <NavbarGroup>
-              <NavbarHeading>Cicero - Time Series Vocalization</NavbarHeading>
-          </NavbarGroup>
-        </Navbar>
+        <CiceroNavbar />
 
         <div className="container">
           <Row style={{ margin: "20px"}}>
@@ -180,15 +178,7 @@ class App extends Component {
 
         </div>
 
-        <footer className="navbar-fixed-bottom">
-					<div className="container">
-						<Row style={{ margin: "10px"}}>
-              <Col md={12}>
-							Cornell Database Group | <img className="App-logo" src={logo} alt="Cornell University" />
-              </Col>
-						</Row>
-					</div>
-				</footer>
+        <Footer />
       </div>
     );
   }
