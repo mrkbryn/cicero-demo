@@ -16,7 +16,6 @@ class App extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      voiceMode: true,
       samplingAlgorithm: true,
       minimumTimestamp: 1325317920,
       maximiumTimestamp: 1515369600,
@@ -56,10 +55,6 @@ class App extends Component {
     return `${getMonthDisplayForIndex(date.getMonth())} ${date.getFullYear()}`;
   }
 
-  toggleVoiceMode = () => {
-    this.setState({ voiceMode: !this.state.voiceMode });
-  }
-
   toggleSamplingMethod = () => {
     this.setState({ samplingAlgorithm: !this.state.samplingAlgorithm });
   }
@@ -70,7 +65,8 @@ class App extends Component {
         fetching: true
       }
     });
-    let url = `http://localhost:8080/query/timeseries?relationName=bitstampusd&startTime=${this.getLeftTimestamp()}&endTime=${this.getRightTimestamp()}&timeColumnName=timestamp&variableColumnName=close&sampling=${this.state.samplingAlgorithm}`
+    window.speechSynthesis.cancel();
+    let url = `https://cicero-2.herokuapp.com/query/timeseries?relationName=bitstampusd&startTime=${this.getLeftTimestamp()}&endTime=${this.getRightTimestamp()}&timeColumnName=timestamp&variableColumnName=close&sampling=${this.state.samplingAlgorithm}`
     fetch(url, {
       method: 'GET',
       headers: new Headers({
@@ -86,9 +82,8 @@ class App extends Component {
     })
     .then(response => {
       this.setState({ vocalization: { fetching: false, result: response }});
-      if (this.state.voiceMode) {
-        this.playVoiceOutput(response);
-      }
+      console.log(response);
+      this.playVoiceOutput(response);
     })
     .catch(error => {
       this.setState({ vocalization: { fetching: false, error: error.message }})
@@ -116,8 +111,6 @@ class App extends Component {
         <div className="container">
           <IntroductionComponent />
           <ConfigPanel
-            voiceMode={this.state.voiceMode}
-            toggleVoiceMode={this.toggleVoiceMode}
             samplingAlgorithm={this.state.samplingAlgorithm}
             toggleSamplingMethod={this.toggleSamplingMethod}
           />
@@ -150,29 +143,8 @@ class App extends Component {
           <VocalizationResult
             fetching={this.state.vocalization.fetching}
             error={this.state.vocalization.error}
+            result={this.state.vocalization.result}
           />
-
-          {this.state.vocalization.result && !this.state.voiceMode &&
-            <div className="vocalization-result">
-              <Row style={{ margin: "40px"}}>
-                <Col md={12}>
-                  <h4>{this.state.vocalization.result}</h4>
-                </Col>
-              </Row>
-
-              <Row style={{ margin: "40px"}}>
-                <Col md={12}>
-                  <Button
-                    className="pt-intent-success pt-icon-play"
-                    style={{ margin: "10px"}}
-                    onClick={() => this.playVoiceOutput(this.state.vocalization.result)}
-                  >
-                    Play Voice Output
-                  </Button>
-                </Col>
-              </Row>
-            </div>
-          }
 
         </div>
 

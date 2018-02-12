@@ -12,7 +12,7 @@ class VocalizationResult extends Component {
     if (props.fetching) {
       return (
         <div>
-          <Spinner className="pt-large row" />
+          <Spinner className="pt-large row" style={{ align: "center" }} />
         </div>
       );
     }
