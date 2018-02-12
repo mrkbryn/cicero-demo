@@ -3,20 +3,14 @@ import './App.css';
 import {
   Button,
   RangeSlider,
-  Spinner,
-  NonIdealState,
 } from '@blueprintjs/core';
 import { Row, Col } from 'react-bootstrap';
 import CiceroNavbar from './CiceroNavbar';
 import IntroductionComponent from './IntroductionComponent';
 import Footer from './Footer';
 import ConfigPanel from './ConfigPanel';
-
-const monthDisplays = [
-  "Jan", "Feb", "March", "Apr", "May",
-  "Jun", "Jul", "Aug", "Sept", "Oct",
-  "Nov", "Dec"
-];
+import VocalizationResult from './VocalizationResult';
+import { getMonthDisplayForIndex } from './util';
 
 class App extends Component {
   constructor(props) {
@@ -59,7 +53,7 @@ class App extends Component {
     let timeRange = this.state.maximiumTimestamp - this.state.minimumTimestamp;
     let timestamp = Math.round(this.state.minimumTimestamp + ((value / 100) * timeRange));
     let date = new Date(timestamp * 1000);
-    return `${monthDisplays[date.getMonth()]} ${date.getFullYear()}`;
+    return `${getMonthDisplayForIndex(date.getMonth())} ${date.getFullYear()}`;
   }
 
   toggleVoiceMode = () => {
@@ -76,7 +70,7 @@ class App extends Component {
         fetching: true
       }
     });
-    let url = `http://localhost:8080/query/timeseries?relationName=bitstampusd&startTime=${this.getLeftTimestamp()}&endTime=${this.getRightTimestamp()}&timeColumnName=timestamp&variableColumnName=close`
+    let url = `http://localhost:8080/query/timeseries?relationName=bitstampusd&startTime=${this.getLeftTimestamp()}&endTime=${this.getRightTimestamp()}&timeColumnName=timestamp&variableColumnName=close&sampling=${this.state.samplingAlgorithm}`
     fetch(url, {
       method: 'GET',
       headers: new Headers({
@@ -128,7 +122,7 @@ class App extends Component {
             toggleSamplingMethod={this.toggleSamplingMethod}
           />
 
-          <Row style={{ margin: "40px"}}>
+          <Row style={{ margin: "40px" }}>
             <Col md={12}>
               <RangeSlider
                 min={0}
@@ -142,7 +136,7 @@ class App extends Component {
             </Col>
           </Row>
 
-          <Row style={{ margin: "10px", "text-align": "center" }}>
+          <Row style={{ margin: "10px", textAlign: "center" }}>
             <Col md={12}>
               <Button
                 disabled={this.state.vocalization.fetching}
@@ -153,19 +147,10 @@ class App extends Component {
             </Col>
           </Row>
 
-          {this.state.vocalization.fetching &&
-            <Spinner className="pt-large row" />
-          }
-
-          {this.state.vocalization.error &&
-            <Row style={{ margin: "40px"}}>
-              <NonIdealState
-                visual="error"
-                title="Oops! We had an issue while building a voice response."
-                description={this.state.vocalization.error}
-              />
-            </Row>
-          }
+          <VocalizationResult
+            fetching={this.state.vocalization.fetching}
+            error={this.state.vocalization.error}
+          />
 
           {this.state.vocalization.result && !this.state.voiceMode &&
             <div className="vocalization-result">
