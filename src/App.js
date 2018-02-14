@@ -7,7 +7,6 @@ import {
 import { Row, Col } from 'react-bootstrap';
 import CiceroNavbar from './CiceroNavbar';
 import IntroductionComponent from './IntroductionComponent';
-import Footer from './Footer';
 import ConfigPanel from './ConfigPanel';
 import VocalizationResult from './VocalizationResult';
 import { getMonthDisplayForIndex } from './util';
@@ -148,10 +147,7 @@ class App extends Component {
             error={this.state.vocalization.error}
             result={this.state.vocalization.result}
           />
-
         </div>
-
-        <Footer />
       </div>
     );
   }

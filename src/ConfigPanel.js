@@ -1,7 +1,8 @@
 import React, { Component } from 'react';
 import {
-  Button,
   Callout,
+  RadioGroup,
+  Radio,
 } from '@blueprintjs/core';
 import {
   Row,
@@ -9,26 +10,35 @@ import {
 } from 'react-bootstrap';
 
 class ConfigPanel extends Component {
+
+  handleVoiceGenerationChange(value) {
+    if (value === 'sampling') {
+      this.props.selectSampling();
+    }
+    if (value === 'full-data') {
+      this.props.selectFullData();
+    }
+  }
+
   render() {
+    let selectedValue = 'sampling';
+    if (!this.props.sampling) {
+      selectedValue = 'full-data';
+    }
+
     return (
-      <div className="App-config" style={{ margin: "20px", textAlign: "center" }}>
+      <div className="App-config" style={{ margin: "20px"}}>
         <Row>
           <Col md={12}>
-          <Button
-            style={{ margin: "10px" }}
-            disabled={this.props.sampling}
-            onClick={this.props.selectSampling}
-          >
-            Use Sampling to Generate Voice Output
-          </Button>
-
-          <Button
-            style={{ margin: "10px" }}
-            disabled={!this.props.sampling}
-            onClick={this.props.selectFullData}
-          >
-            Use Full Data to Generate Voice Output
-          </Button>
+            <RadioGroup
+              className="pt-large"
+              label="Voice Generation Method"
+              onChange={e => this.handleVoiceGenerationChange(e.target.value)}
+              selectedValue={selectedValue}
+            >
+              <Radio label="Use Sampling to Generate Voice Output" value="sampling" />
+              <Radio label="Use Full Data to Generate Voice Output" value="full-data" />
+            </RadioGroup>
           </Col>
         </Row>
 
@@ -40,15 +50,12 @@ class ConfigPanel extends Component {
                 className="pt-icon-info-sign"
                 title="Warning: Voice Generation May Take A While"
               >
-                You have selected to use the full-data algorithm. This
-                vocalization method will produce a higher quality output
+                You have selected to use the full-data algorithm. This method produces a higher quality output
                 that better reflects the data, but it may take a significant
-                amount of time. We have set a timeout on the backend so that
-                it will take at most 90 seconds before either successfully
-                producing the most precise voice response or failing to
-                produce an output. If the full-data algorithm takes too long,
-                we suggest switching to the sampling algorithm to hear voice
-                descriptions of time ranges.
+                amount of time. This method will time out after 90 seconds if it
+                has not generated the best output before then. If the full-data
+                method takes too long, we suggest switching to the sampling algorithm
+                to hear voice good quality, approximate descriptions of the data.
               </Callout>
               </Col>
           </Row>
