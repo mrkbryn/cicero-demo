@@ -17,9 +17,7 @@ class App extends Component {
     super(props);
     this.state = {
       samplingAlgorithm: true,
-      minimumTimestamp: 1325317920,
-      maximiumTimestamp: 1515369600,
-      range: [0,100],
+      range: [0,95],
       vocalization: {
         fetching: false,
       }
@@ -30,29 +28,22 @@ class App extends Component {
     window.speechSynthesis.getVoices();
   }
 
-  getLeftTimestamp() {
-    let timeRange = this.state.maximiumTimestamp - this.state.minimumTimestamp;
-    let leftTimestamp = (this.state.range[0] / 100) * timeRange + this.state.minimumTimestamp;
-    return Math.round(leftTimestamp);
+  getMonthYearString(value) {
+    let month = value % 12;
+    let year = 2011 + Math.trunc(value / 12);
+    return `${getMonthDisplayForIndex(month)} ${year}`;
   }
 
-  getRightTimestamp() {
-    let timeRange = this.state.maximiumTimestamp - this.state.minimumTimestamp;
-    let rightTimestamp = (this.state.range[1] / 100) * timeRange + this.state.minimumTimestamp;
-    return Math.round(rightTimestamp);
+  getURLDateParam(value) {
+    let month = (value % 12) + 1;
+    let year = 2011 + Math.trunc(value / 12);
+    return `${year}-${month}-01`; // yyyy-MM-dd
   }
 
   handleValueChange = (values) => {
     this.setState({
       range: values
     })
-  }
-
-  renderSliderLabel = (value) => {
-    let timeRange = this.state.maximiumTimestamp - this.state.minimumTimestamp;
-    let timestamp = Math.round(this.state.minimumTimestamp + ((value / 100) * timeRange));
-    let date = new Date(timestamp * 1000);
-    return `${getMonthDisplayForIndex(date.getMonth())} ${date.getFullYear()}`;
   }
 
   toggleSamplingMethod = () => {
@@ -66,7 +57,9 @@ class App extends Component {
       }
     });
     window.speechSynthesis.cancel();
-    let url = `https://cicero-2.herokuapp.com/query/timeseries?relationName=bitstampusd&startTime=${this.getLeftTimestamp()}&endTime=${this.getRightTimestamp()}&timeColumnName=timestamp&variableColumnName=close&sampling=${this.state.samplingAlgorithm}`
+    let startDateParam = this.getURLDateParam(this.state.range[0]);
+    let endDateParam = this.getURLDateParam(this.state.range[1]);
+    let url = `https://cicero-2.herokuapp.com/query/timeseries?relationName=bitstampusd&startDate=${startDateParam}&endDate=${endDateParam}&timeColumnName=timestamp&variableColumnName=close&sampling=${this.state.samplingAlgorithm}`
     fetch(url, {
       method: 'GET',
       headers: new Headers({
@@ -75,15 +68,15 @@ class App extends Component {
     })
     .then(response => {
       if (response.ok) {
-        return response.text();
+        return response.json();
       }
       console.log(response.error);
       throw new Error('Failed to fetch vocalization');
     })
-    .then(response => {
-      this.setState({ vocalization: { fetching: false, result: response }});
-      console.log(response);
-      this.playVoiceOutput(response);
+    .then(json => {
+      this.setState({ vocalization: { fetching: false, result: json.vocalization }});
+      console.log(json);
+      this.playVoiceOutput(json.vocalization);
     })
     .catch(error => {
       this.setState({ vocalization: { fetching: false, error: error.message }})
@@ -119,12 +112,12 @@ class App extends Component {
             <Col md={12}>
               <RangeSlider
                 min={0}
-                max={100}
+                max={95}
                 stepSize={1}
-                labelStepSize={10}
+                labelStepSize={12}
                 onChange={this.handleValueChange}
                 value={this.state.range}
-                renderLabel={this.renderSliderLabel}
+                renderLabel={this.getMonthYearString}
               />
             </Col>
           </Row>
