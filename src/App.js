@@ -65,23 +65,21 @@ class App extends Component {
     fetch(url, {
       method: 'GET',
       headers: new Headers({
-        'Content-Type': 'text/plain'
+        'Content-Type': 'application/json'
       })
     })
-    .then(response => {
-      if (response.ok) {
-        return response.json();
-      }
-      console.log(response.error);
-      throw new Error('Failed to fetch vocalization');
-    })
+    .then(response => response.json())
     .then(json => {
-      this.setState({ vocalization: { fetching: false, result: json.vocalization }});
-      console.log(json);
-      this.playVoiceOutput(json.vocalization);
+      console.log(json)
+      if (json.error) {
+        this.setState({ vocalization: { fetching: false, error: json.message }});
+      } else {
+        this.setState({ vocalization: { fetching: false, result: json.vocalization }});
+        this.playVoiceOutput(json.vocalization);
+      }
     })
     .catch(error => {
-      this.setState({ vocalization: { fetching: false, error: error.message }})
+      this.setState({ vocalization: { fetching: false, error: 'We were unable to connect to CiceroDB' }});
     });
   }
 
