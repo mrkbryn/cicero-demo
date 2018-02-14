@@ -7,5 +7,10 @@
   margin: "50px";
 }
 
+.vocalization-result {
+  text-align: center;
+  margin: 40px;
+}
+
 @import '../node_modules/@blueprintjs/core/dist/blueprint.css';
 @import '../node_modules/@blueprintjs/datetime/dist/blueprint-datetime.css';

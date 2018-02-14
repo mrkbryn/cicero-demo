@@ -18,7 +18,7 @@ class App extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      samplingAlgorithm: true,
+      sampling: true,
       range: [0,95],
       vocalization: {
         fetching: false,
@@ -48,8 +48,16 @@ class App extends Component {
     })
   }
 
-  toggleSamplingMethod = () => {
-    this.setState({ samplingAlgorithm: !this.state.samplingAlgorithm });
+  selectSampling = () => {
+    this.setState({
+      sampling: true
+    });
+  }
+
+  selectFullData = () => {
+    this.setState({
+      sampling: false
+    });
   }
 
   getVocalization = (e) => {
@@ -61,7 +69,7 @@ class App extends Component {
     window.speechSynthesis.cancel();
     let startDateParam = this.getURLDateParam(this.state.range[0]);
     let endDateParam = this.getURLDateParam(this.state.range[1]);
-    let url = `${api_url}/query/timeseries?relationName=bitstampusd&startDate=${startDateParam}&endDate=${endDateParam}&timeColumnName=timestamp&variableColumnName=close&sampling=${this.state.samplingAlgorithm}`
+    let url = `${api_url}/query/timeseries?relationName=bitstampusd&startDate=${startDateParam}&endDate=${endDateParam}&timeColumnName=timestamp&variableColumnName=close&sampling=${this.state.sampling}`
     fetch(url, {
       method: 'GET',
       headers: new Headers({
@@ -70,7 +78,6 @@ class App extends Component {
     })
     .then(response => response.json())
     .then(json => {
-      console.log(json)
       if (json.error) {
         this.setState({ vocalization: { fetching: false, error: json.message }});
       } else {
@@ -102,10 +109,13 @@ class App extends Component {
         <CiceroNavbar />
 
         <div className="container">
+
           <IntroductionComponent />
+
           <ConfigPanel
-            samplingAlgorithm={this.state.samplingAlgorithm}
-            toggleSamplingMethod={this.toggleSamplingMethod}
+            selectSampling={this.selectSampling}
+            selectFullData={this.selectFullData}
+            sampling={this.state.sampling}
           />
 
           <Row style={{ margin: "40px" }}>

@@ -1,9 +1,12 @@
 import React, { Component } from 'react';
 import {
   Spinner,
-  NonIdealState,
+  Callout,
 } from '@blueprintjs/core';
-import { Row } from 'react-bootstrap';
+import {
+  Row,
+  Col,
+} from 'react-bootstrap';
 
 class VocalizationResult extends Component {
   render() {
@@ -11,8 +14,12 @@ class VocalizationResult extends Component {
 
     if (props.fetching) {
       return (
-        <div>
-          <Spinner className="pt-large row" style={{ align: "center" }} />
+        <div className="vocalization-result">
+          <Row>
+            <Col md={12}>
+              <Spinner className="pt-large row" />
+            </Col>
+          </Row>
         </div>
       );
     }
@@ -20,22 +27,22 @@ class VocalizationResult extends Component {
     if (props.error) {
       return (
         <div className="vocalization-result">
-          <Row style={{ margin: "40px"}}>
-            <NonIdealState
-              visual="error"
-              title="Oops! We had an issue while building a voice response."
-              description={props.error}
-            />
+          <Row>
+            <Col md={12}>
+              <Callout
+                className="pt-intent-danger"
+                iconName="pt-icon-error"
+                title="Error!"
+              >
+                {props.error}
+              </Callout>
+            </Col>
           </Row>
         </div>
       );
     }
 
-    return (
-      <div className="vocalization-result">
-
-      </div>
-    );
+    return null;
   }
 }
 
