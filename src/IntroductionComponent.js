@@ -4,26 +4,36 @@ class IntroductionComponent extends Component {
   render() {
     return (
       <div className="intro" style={{ margin: "20px", align: "left" }}>
-        <h1>Welcome!</h1>
+        <h4>An Explanation of the Demo</h4>
         <p>
-          Welcome to the demo of CiceroDB Time Series functionality, made by the
-          Cornell Database Group. CiceroDB is an experimental database
-          system that supports voice interactions with data.
-
-          In this project, we demonstrate how our prototype system can vocalize time
-          series data, i.e. numerical data that has some dimension of time. This
-          includes domains such as minute-by-minute closing prices for different
-          stocks or financial instruments.
+          Welcome to CiceroDB. With this demo, we present a unique way to
+          interact with data: through voice output.
         </p>
-
         <p>
-          Below, we provide an interface for selecting time ranges for which you
-          want to hear voice descriptions of how Bitcoin has traded during that time range. This dataset includes
-          over 3 million rows. You can use the range sliders below to specify
-          the data range that you are interested in learning about. After moving
-          the range slider to the data you are interested in, click 'Get Vocalization'
-          to hear the voice description of how the price of Bitcoin changed over
-          that time period.
+          Below, we have provided an interface that allows selecting a range
+          of data and then hearing voice output that describes the data
+          during that time.
+        </p>
+        <p>
+          The data you can interact with is the historical price of Bitcoin
+          from the Bitstamp exchange from 2011 to the beginning of 2018.
+          It contains the minute-by-minute closing prices on this Bitcoin
+          exchange (over 3 million data points!), which is stored in a database.
+        </p>
+        <p>
+          There are two methods for generating the voice output that describes
+          the Bitcoin price for a time range. We have a fast, sampling algorithm
+          that quickly generates approximate descriptions. Also, we have a slow, precise
+          algorithm that generates optimal descriptions of data. You can
+          switch between the two methods with the buttons below.
+        </p>
+        <h4>The Task</h4>
+        <p>
+          The task is to select the time range at which it would be best to buy
+          then sell at the final price. We describe best in terms of the greatest
+          increase, i.e. if you had bought one bitcoin as a gift at some beginning
+          time, then were able to sell at some end date, what was the best time period
+          to receive then sell so that the difference in the price is the greatest.
         </p>
       </div>
     );
