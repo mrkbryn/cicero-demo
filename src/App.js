@@ -62,7 +62,6 @@ class App extends Component {
     let startDateParam = this.getURLDateParam(this.state.range[0]);
     let endDateParam = this.getURLDateParam(this.state.range[1]);
     let url = `${api_url}/query/timeseries?relationName=bitstampusd&startDate=${startDateParam}&endDate=${endDateParam}&timeColumnName=timestamp&variableColumnName=close&sampling=${this.state.samplingAlgorithm}`
-    console.log(url);
     fetch(url, {
       method: 'GET',
       headers: new Headers({
