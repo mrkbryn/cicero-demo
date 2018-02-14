@@ -29,7 +29,7 @@ class ConfigPanel extends Component {
     return (
       <div className="App-config" style={{ margin: "20px"}}>
         <Row>
-          <Col md={12}>
+          <Col md={6}>
             <RadioGroup
               className="pt-large"
               label="Voice Generation Method"
@@ -39,6 +39,16 @@ class ConfigPanel extends Component {
               <Radio label="Use Sampling to Generate Voice Output" value="sampling" />
               <Radio label="Use Full Data to Generate Voice Output" value="full-data" />
             </RadioGroup>
+          </Col>
+          <Col md={6} style={{ textAlign: "right" }}>
+            <input
+              style={{ width: "300px" }}
+              className="pt-input"
+              type="text"
+              placeholder="Enter your assigned user ID"
+              dir="auto"
+              onChange={e => console.log(e.target.value)}
+            />
           </Col>
         </Row>
 

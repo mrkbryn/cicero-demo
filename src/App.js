@@ -59,6 +59,12 @@ class App extends Component {
     });
   }
 
+  setUserID(id) {
+    this.setState({
+      userID: id
+    });
+  }
+
   getVocalization = (e) => {
     this.setState({
       vocalization: {
@@ -115,6 +121,7 @@ class App extends Component {
             selectSampling={this.selectSampling}
             selectFullData={this.selectFullData}
             sampling={this.state.sampling}
+            setUserID={this.setUserID}
           />
 
           <Row style={{ margin: "40px" }}>
