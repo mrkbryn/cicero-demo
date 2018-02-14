@@ -36,6 +36,7 @@ class ConfigPanel extends Component {
           <Row style={{ margin: "20px" }}>
             <Col md={12}>
               <Callout
+                style={{ textAlign: "left" }}
                 className="pt-icon-info-sign"
                 title="Warning: Voice Generation May Take A While"
               >

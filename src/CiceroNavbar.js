@@ -3,7 +3,6 @@ import {
   Navbar,
   NavbarGroup,
   NavbarHeading,
-  Button,
 } from '@blueprintjs/core';
 
 class CiceroNavbar extends Component {
@@ -12,9 +11,6 @@ class CiceroNavbar extends Component {
       <Navbar>
         <NavbarGroup>
             <NavbarHeading>Cicero - Time Series Vocalization</NavbarHeading>
-        </NavbarGroup>
-        <NavbarGroup align="right">
-          <Button className="pt-minimal" iconName="cog"></Button>
         </NavbarGroup>
       </Navbar>
     )
