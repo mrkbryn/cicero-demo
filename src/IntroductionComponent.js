@@ -4,11 +4,11 @@ class IntroductionComponent extends Component {
   render() {
     return (
       <div className="intro" style={{ margin: "20px", align: "left" }}>
-        <h4>An Explanation of the Demo</h4>
-        <p>
-          Welcome to CiceroDB. With this demo, we present a unique way to
-          interact with data: through voice output.
+        <h1 className="display-4">Welcome to Cicero DB</h1>
+        <p className="lead">
+          We present a unique way to interact with data: through voice output.
         </p>
+        <h4>An Explanation of the Demo</h4>
         <p>
           Below, we have provided an interface that allows selecting a range
           of data and then hearing voice output that describes the data
