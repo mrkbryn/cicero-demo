@@ -12,6 +12,8 @@ import ConfigPanel from './ConfigPanel';
 import VocalizationResult from './VocalizationResult';
 import { getMonthDisplayForIndex } from './util';
 
+const api_url = process.env.REACT_APP_CICERO_URL;
+
 class App extends Component {
   constructor(props) {
     super(props);
@@ -59,7 +61,8 @@ class App extends Component {
     window.speechSynthesis.cancel();
     let startDateParam = this.getURLDateParam(this.state.range[0]);
     let endDateParam = this.getURLDateParam(this.state.range[1]);
-    let url = `https://cicero-2.herokuapp.com/query/timeseries?relationName=bitstampusd&startDate=${startDateParam}&endDate=${endDateParam}&timeColumnName=timestamp&variableColumnName=close&sampling=${this.state.samplingAlgorithm}`
+    let url = `${api_url}/query/timeseries?relationName=bitstampusd&startDate=${startDateParam}&endDate=${endDateParam}&timeColumnName=timestamp&variableColumnName=close&sampling=${this.state.samplingAlgorithm}`
+    console.log(url);
     fetch(url, {
       method: 'GET',
       headers: new Headers({
