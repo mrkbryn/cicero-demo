@@ -21,9 +21,9 @@ class ConfigPanel extends Component {
   }
 
   render() {
-    let selectedValue = 'sampling';
-    if (!this.props.sampling) {
-      selectedValue = 'full-data';
+    var selectedValue;
+    if (this.props.sampling !== undefined) {
+      selectedValue = this.props.sampling ? 'sampling' : 'full-data';
     }
 
     return (
@@ -52,13 +52,13 @@ class ConfigPanel extends Component {
           </Col>
         </Row>
 
-        {!this.props.sampling &&
+        {this.props.sampling !== undefined && !this.props.sampling &&
           <Row style={{ margin: "20px" }}>
             <Col md={12}>
               <Callout
                 style={{ textAlign: "left" }}
                 className="pt-icon-info-sign"
-                title="Warning: Voice Generation May Take A While"
+                title="Voice Generation May Take A While"
               >
                 You have selected to use the full-data algorithm. This method produces a higher quality output
                 that better reflects the data, but it may take a significant

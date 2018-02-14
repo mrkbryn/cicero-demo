@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 
-class IntroductionComponent extends Component {
+class Intro extends Component {
   render() {
     return (
       <div className="intro" style={{ margin: "20px", align: "left" }}>
@@ -27,17 +27,9 @@ class IntroductionComponent extends Component {
           algorithm that generates optimal descriptions of data. You can
           switch between the two methods with the buttons below.
         </p>
-        <h4>The Task</h4>
-        <p>
-          The task is to select the time range at which it would be best to buy
-          then sell at the final price. We describe best in terms of the greatest
-          increase, i.e. if you had bought one bitcoin as a gift at some beginning
-          time, then were able to sell at some end date, what was the best time period
-          to receive then sell so that the difference in the price is the greatest.
-        </p>
       </div>
     );
   }
 }
 
-export default IntroductionComponent;
+export default Intro;

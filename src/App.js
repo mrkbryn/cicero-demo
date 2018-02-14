@@ -6,9 +6,10 @@ import {
 } from '@blueprintjs/core';
 import { Row, Col } from 'react-bootstrap';
 import CiceroNavbar from './CiceroNavbar';
-import IntroductionComponent from './IntroductionComponent';
+import Intro from './Intro';
 import ConfigPanel from './ConfigPanel';
 import VocalizationResult from './VocalizationResult';
+import NotChromeWarning from './NotChromeWarning';
 import { getMonthDisplayForIndex } from './util';
 
 const api_url = process.env.REACT_APP_CICERO_URL;
@@ -17,7 +18,6 @@ class App extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      sampling: true,
       range: [0,95],
       vocalization: {
         fetching: false,
@@ -66,6 +66,14 @@ class App extends Component {
   }
 
   getVocalization = (e) => {
+    if (this.state.sampling === undefined) {
+      this.setState({
+        vocalization: {
+          error: 'Please select a method for voice generation'
+        }
+      });
+      return;
+    }
     this.setState({
       vocalization: {
         fetching: true
@@ -114,8 +122,9 @@ class App extends Component {
         <CiceroNavbar />
 
         <div className="container">
+          <NotChromeWarning />
 
-          <IntroductionComponent />
+          <Intro />
 
           <ConfigPanel
             selectSampling={this.selectSampling}
