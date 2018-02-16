@@ -21,7 +21,8 @@ class App extends Component {
       range: [0,95],
       vocalization: {
         fetching: false,
-      }
+      },
+      userID: ''
     }
   }
 
@@ -59,13 +60,9 @@ class App extends Component {
     });
   }
 
-  setUserID(id) {
-    this.setState({
-      userID: id
-    });
-  }
-
   getVocalization = (e) => {
+    window.speechSynthesis.cancel();
+
     if (this.state.sampling === undefined) {
       this.setState({
         vocalization: {
@@ -74,15 +71,26 @@ class App extends Component {
       });
       return;
     }
+
+    if (this.state.userID === '') {
+      this.setState({
+        vocalization: {
+          error: 'Please type your user ID in the provided input'
+        }
+      });
+      return;
+    }
+
     this.setState({
       vocalization: {
         fetching: true
       }
     });
-    window.speechSynthesis.cancel();
+
     let startDateParam = this.getURLDateParam(this.state.range[0]);
     let endDateParam = this.getURLDateParam(this.state.range[1]);
-    let url = `${api_url}/query/timeseries?relationName=bitstampusd&startDate=${startDateParam}&endDate=${endDateParam}&timeColumnName=timestamp&variableColumnName=close&sampling=${this.state.sampling}`
+
+    let url = `${api_url}/query/timeseries?relationName=bitstampusd&startDate=${startDateParam}&endDate=${endDateParam}&timeColumnName=timestamp&variableColumnName=close&sampling=${this.state.sampling}&userID=${this.state.userID}`
     fetch(url, {
       method: 'GET',
       headers: new Headers({
@@ -116,6 +124,10 @@ class App extends Component {
     synth.speak(voiceOutput);
   }
 
+  handleUserIDChange = (event) => {
+    this.setState({ userID: event.target.value});
+  }
+
   render() {
     return (
       <div className="App">
@@ -132,6 +144,18 @@ class App extends Component {
             sampling={this.state.sampling}
             setUserID={this.setUserID}
           />
+
+          <Row>
+            <Col md={6} style={{ textAlign: "left", marginLeft: "20px" }}>
+              <input
+                style={{ width: "300px" }}
+                className="pt-input"
+                type="text"
+                placeholder="Enter your assigned user ID"
+                onChange={this.handleUserIDChange}
+              />
+            </Col>
+          </Row>
 
           <Row style={{ margin: "40px" }}>
             <Col md={12}>

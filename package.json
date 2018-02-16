@@ -6,6 +6,7 @@
     "@blueprintjs/core": "^1.35.2",
     "@blueprintjs/datetime": "^1.25.2",
     "bootstrap": "^3.3.7",
+    "cross-fetch": "^1.1.1",
     "fetch": "^1.1.0",
     "react": "^16.2.0",
     "react-addons-css-transition-group": "^15.6.2",

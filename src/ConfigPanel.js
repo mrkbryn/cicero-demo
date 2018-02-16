@@ -40,16 +40,6 @@ class ConfigPanel extends Component {
               <Radio label="Use Full Data to Generate Voice Output" value="full-data" />
             </RadioGroup>
           </Col>
-          <Col md={6} style={{ textAlign: "right" }}>
-            <input
-              style={{ width: "300px" }}
-              className="pt-input"
-              type="text"
-              placeholder="Enter your assigned user ID"
-              dir="auto"
-              onChange={e => console.log(e.target.value)}
-            />
-          </Col>
         </Row>
 
         {this.props.sampling !== undefined && !this.props.sampling &&
