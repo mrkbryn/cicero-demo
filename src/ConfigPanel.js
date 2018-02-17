@@ -52,12 +52,12 @@ class ConfigPanel extends Component {
               >
                 You have selected to use the full-data algorithm. This method produces a higher quality output
                 that better reflects the data, but it may take a significant
-                amount of time. This method will time out after 90 seconds if it
+                amount of time. This method will timeout and fail after 25 seconds if it
                 has not generated the best output before then. If the full-data
                 method takes too long, we suggest switching to the sampling algorithm
-                to hear voice good quality, approximate descriptions of the data.
+                to hear good quality, approximate descriptions of the data.
               </Callout>
-              </Col>
+            </Col>
           </Row>
         }
       </div>

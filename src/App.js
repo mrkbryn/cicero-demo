@@ -66,7 +66,7 @@ class App extends Component {
     if (this.state.sampling === undefined) {
       this.setState({
         vocalization: {
-          error: 'Please select a method for voice generation'
+          error: 'Please select a Voice Generation Method'
         }
       });
       return;
@@ -75,7 +75,7 @@ class App extends Component {
     if (this.state.userID === '') {
       this.setState({
         vocalization: {
-          error: 'Please type your user ID in the provided input'
+          error: 'Please type your user AMT ID in the provided input'
         }
       });
       return;
@@ -151,7 +151,7 @@ class App extends Component {
                 style={{ width: "300px" }}
                 className="pt-input"
                 type="text"
-                placeholder="Enter your assigned user ID"
+                placeholder="Enter your AMT user ID"
                 onChange={this.handleUserIDChange}
               />
             </Col>

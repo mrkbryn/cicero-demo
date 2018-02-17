@@ -6,26 +6,22 @@ class Intro extends Component {
       <div className="intro" style={{ margin: "20px", align: "left" }}>
         <h1 className="display-4">Welcome to Cicero DB</h1>
         <p className="lead">
-          We present a unique way to interact with data: through voice output.
-        </p>
-        <h4>An Explanation of the Demo</h4>
-        <p>
-          Below, we have provided an interface that allows selecting a range
-          of data and then hearing voice output that describes the data
-          during that time.
+          We present a unique way to interact with data: through a voice interface.
         </p>
         <p>
-          The data you can interact with is the historical price of Bitcoin
-          from the Bitstamp exchange from 2011 to the beginning of 2018.
-          It contains the minute-by-minute closing prices on this Bitcoin
-          exchange (over 3 million data points!), which is stored in a database.
+          At the bottom of this page, there is a timeline representing the price of Bitcoin on the <a href="https://www.bitstamp.net/">Bitstamp</a> exchange
+          from when it first started trading in December 2011 to January 2018. Use the left and right markers on the timeline to select a time range.
+          Then, click the 'Get Vocalization' button to generate and hear a voice description of how the price of Bitcoin has changed during the selected time range.
         </p>
         <p>
-          There are two methods for generating the voice output that describes
-          the Bitcoin price for a time range. We have a fast, sampling algorithm
-          that quickly generates approximate descriptions. Also, we have a slow, precise
-          algorithm that generates optimal descriptions of data. You can
-          switch between the two methods with the buttons below.
+          We have provided two methods for voice generation, which you can switch between below.
+          The first method uses sampling to quickly generate high quality voice descriptions of the data.
+          The second method processes the entire data for a time range to create the best description of the data.
+          However, this second method may take much longer than the sampling method due to the amount of data it has
+          to process. You can freely switch between the two methods as you explore the Bitcoin data.
+        </p>
+        <p>
+          <em>Note: Please enter your AMT user ID to ensure we have a record of your participation in our user study.</em>
         </p>
       </div>
     );
