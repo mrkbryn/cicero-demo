@@ -48,12 +48,12 @@ class ConfigPanel extends Component {
               <Callout
                 style={{ textAlign: "left" }}
                 className="pt-icon-info-sign"
-                title="Voice Generation May Take A While"
+                title="Voice generation may take up to 25 seconds"
               >
                 You have selected to use the full-data algorithm. This method produces a higher quality output
                 that better reflects the data, but it may take a significant
-                amount of time. This method will timeout and fail after 25 seconds if it
-                has not generated the best output before then. If the full-data
+                amount of time. This method will timeout after 25 seconds if it
+                has not generated the best output in that time. If the full-data
                 method takes too long, we suggest switching to the sampling algorithm
                 to hear good quality, approximate descriptions of the data.
               </Callout>
