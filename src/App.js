@@ -68,9 +68,17 @@ class App extends Component {
     let startDateParam = this.getURLDateParam(this.state.range[0]);
     let endDateParam = this.getURLDateParam(this.state.range[1]);
 
-    let url = `${api_url}/query/timeseries?relationName=bitstampusd&startDate=${startDateParam}&endDate=${endDateParam}&timeColumnName=timestamp&variableColumnName=close&userID=${this.state.userID}`
+    let url = `${api_url}/query/timeseries`
     fetch(url, {
-      method: 'GET',
+      method: 'PUT',
+      body: JSON.stringify({
+        relationName: 'bitstampusd',
+        timeColumnName: 'timestamp',
+        variableColumnName: 'close',
+        startDate: startDateParam,
+        endDate: endDateParam,
+        userID: this.state.userID
+      }),
       headers: new Headers({
         'Content-Type': 'application/json'
       })
@@ -85,6 +93,7 @@ class App extends Component {
       }
     })
     .catch(error => {
+      console.log(error);
       this.setState({ vocalization: { fetching: false, error: 'We were unable to connect to CiceroDB' }});
     });
   }
