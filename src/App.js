@@ -7,7 +7,6 @@ import {
 import { Row, Col } from 'react-bootstrap';
 import CiceroNavbar from './CiceroNavbar';
 import Intro from './Intro';
-import ConfigPanel from './ConfigPanel';
 import VocalizationResult from './VocalizationResult';
 import NotChromeWarning from './NotChromeWarning';
 import { getMonthDisplayForIndex } from './util';
@@ -48,29 +47,8 @@ class App extends Component {
     })
   }
 
-  selectSampling = () => {
-    this.setState({
-      sampling: true
-    });
-  }
-
-  selectFullData = () => {
-    this.setState({
-      sampling: false
-    });
-  }
-
   getVocalization = (e) => {
     window.speechSynthesis.cancel();
-
-    if (this.state.sampling === undefined) {
-      this.setState({
-        vocalization: {
-          error: 'Please select a Voice Generation Method'
-        }
-      });
-      return;
-    }
 
     if (this.state.userID === '') {
       this.setState({
@@ -90,7 +68,7 @@ class App extends Component {
     let startDateParam = this.getURLDateParam(this.state.range[0]);
     let endDateParam = this.getURLDateParam(this.state.range[1]);
 
-    let url = `${api_url}/query/timeseries?relationName=bitstampusd&startDate=${startDateParam}&endDate=${endDateParam}&timeColumnName=timestamp&variableColumnName=close&sampling=${this.state.sampling}&userID=${this.state.userID}`
+    let url = `${api_url}/query/timeseries?relationName=bitstampusd&startDate=${startDateParam}&endDate=${endDateParam}&timeColumnName=timestamp&variableColumnName=close&userID=${this.state.userID}`
     fetch(url, {
       method: 'GET',
       headers: new Headers({
@@ -137,13 +115,6 @@ class App extends Component {
           <NotChromeWarning />
 
           <Intro />
-
-          <ConfigPanel
-            selectSampling={this.selectSampling}
-            selectFullData={this.selectFullData}
-            sampling={this.state.sampling}
-            setUserID={this.setUserID}
-          />
 
           <Row>
             <Col md={6} style={{ textAlign: "left", marginLeft: "20px" }}>
