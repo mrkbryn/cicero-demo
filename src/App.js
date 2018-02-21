@@ -1,15 +1,13 @@
 import React, { Component } from 'react';
 import './App.css';
-import {
-  Button,
-  RangeSlider,
-} from '@blueprintjs/core';
+import { Button } from '@blueprintjs/core';
 import { Row, Col } from 'react-bootstrap';
 import CiceroNavbar from './CiceroNavbar';
 import Intro from './Intro';
+import TimeRangeSlider from './TimeRangeSlider';
 import VocalizationResult from './VocalizationResult';
 import NotChromeWarning from './NotChromeWarning';
-import { getMonthDisplayForIndex } from './util';
+import { getDateStringFromRangeValue } from './util';
 
 const api_url = process.env.REACT_APP_CICERO_URL;
 
@@ -29,12 +27,6 @@ class App extends Component {
     window.speechSynthesis.getVoices();
   }
 
-  getMonthYearString(value) {
-    let month = value % 12;
-    let year = 2011 + Math.trunc(value / 12);
-    return `${getMonthDisplayForIndex(month)} ${year}`;
-  }
-
   getURLDateParam(value) {
     let month = (value % 12) + 1;
     let year = 2011 + Math.trunc(value / 12);
@@ -45,6 +37,12 @@ class App extends Component {
     this.setState({
       range: values
     })
+  }
+
+  setTimeRange = (values) => {
+    this.setState({
+      range: values
+    });
   }
 
   getVocalization = (e) => {
@@ -65,10 +63,13 @@ class App extends Component {
       }
     });
 
-    let startDateParam = this.getURLDateParam(this.state.range[0]);
-    let endDateParam = this.getURLDateParam(this.state.range[1]);
+    let startDateParam = getDateStringFromRangeValue(this.state.range[0]);
+    let endDateParam = getDateStringFromRangeValue(this.state.range[1]);
 
-    let url = `${api_url}/query/timeseries`
+    console.log(startDateParam);
+    console.log(endDateParam);
+
+    let url = `${api_url}/query/timeseries/vocalization`
     fetch(url, {
       method: 'PUT',
       body: JSON.stringify({
@@ -137,19 +138,10 @@ class App extends Component {
             </Col>
           </Row>
 
-          <Row style={{ margin: "40px" }}>
-            <Col md={12}>
-              <RangeSlider
-                min={0}
-                max={95}
-                stepSize={1}
-                labelStepSize={12}
-                onChange={this.handleValueChange}
-                value={this.state.range}
-                renderLabel={this.getMonthYearString}
-              />
-            </Col>
-          </Row>
+          <TimeRangeSlider
+            range={this.state.range}
+            setTimeRange={this.setTimeRange}
+          />
 
           <Row style={{ margin: "10px", textAlign: "center" }}>
             <Col md={12}>
