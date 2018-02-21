@@ -6,21 +6,17 @@ class FetchResult extends Component {
   render() {
     let props = this.props;
 
-    if (props.fetching) {
-      return (
-        <div className="vocalization-result">
+    return (
+      <div className="vocalization-result">
+        {props.fetching &&
           <Row>
             <Col md={12}>
               <Spinner className="pt-large row" />
             </Col>
           </Row>
-        </div>
-      );
-    }
+        }
 
-    if (props.error) {
-      return (
-        <div className="vocalization-result">
+        {props.error &&
           <Row>
             <Col md={12}>
               <Callout
@@ -32,11 +28,9 @@ class FetchResult extends Component {
               </Callout>
             </Col>
           </Row>
-        </div>
-      );
-    }
-
-    return null;
+        }
+      </div>
+    );
   }
 }
 
