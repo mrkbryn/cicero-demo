@@ -16,7 +16,7 @@ class App extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      mode: 'vocalization',
+      mode: 'sonification',
       range: [0,95],
       fetchResult: {
         fetching: false,

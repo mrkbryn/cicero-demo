@@ -39,7 +39,27 @@ export const playSonification = (values) => {
 
   var minVal = Math.min(...values);
   var maxVal = Math.max(...values);
+  var range = maxVal - minVal;
+
+  var minimumFrequency = 220;
+  var maximumFrequency = 780;
 
   console.log('Min Value: ', minVal);
   console.log('Max Value: ', maxVal);
+
+  let audioCtx = new AudioContext();
+  let oscillator = audioCtx.createOscillator();
+  let millisecondsBetweenPitches = 500;
+
+  // set timeouts to change frequency every 0.5 seconds
+  for (var i = 0; i < values.length; i++) {
+    let scaledFrequency = minimumFrequency + (maximumFrequency - minimumFrequency) * ((values[i] - minVal) / range);
+    setTimeout(() => {
+      oscillator.frequency.value = scaledFrequency
+    }, millisecondsBetweenPitches * i);
+  }
+
+  oscillator.connect(audioCtx.destination);
+  oscillator.start();
+  oscillator.stop(audioCtx.currentTime + (values.length / 2));
 }
