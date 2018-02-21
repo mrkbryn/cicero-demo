@@ -4,10 +4,11 @@ import { Button } from '@blueprintjs/core';
 import { Row, Col } from 'react-bootstrap';
 import CiceroNavbar from './CiceroNavbar';
 import Intro from './Intro';
+import UserIdInput from './UserIdInput';
 import TimeRangeSlider from './TimeRangeSlider';
-import VocalizationResult from './VocalizationResult';
+import FetchResult from './FetchResult';
 import NotChromeWarning from './NotChromeWarning';
-import { getDateStringFromRangeValue } from './util';
+import { getDateStringFromRangeValue, playVocalization, playSonification } from './util';
 
 const api_url = process.env.REACT_APP_CICERO_URL;
 
@@ -15,8 +16,9 @@ class App extends Component {
   constructor(props) {
     super(props);
     this.state = {
+      mode: 'vocalization',
       range: [0,95],
-      vocalization: {
+      fetchResult: {
         fetching: false,
       },
       userID: ''
@@ -27,59 +29,59 @@ class App extends Component {
     window.speechSynthesis.getVoices();
   }
 
-  getURLDateParam(value) {
-    let month = (value % 12) + 1;
-    let year = 2011 + Math.trunc(value / 12);
-    return `${year}-${month}-01`; // yyyy-MM-dd
-  }
-
-  handleValueChange = (values) => {
-    this.setState({
-      range: values
-    })
-  }
-
   setTimeRange = (values) => {
     this.setState({
       range: values
     });
   }
 
-  getVocalization = (e) => {
+  setUserId = (userId) => {
+    this.setState({
+      userID: userId
+    });
+  }
+
+  handleVocalizationResult = (json) => {
+    playVocalization(json.vocalization);
+  }
+
+  handleSonificationResult = (json) => {
+    playSonification(json.values);
+  }
+
+  fetchResult = (e) => {
     window.speechSynthesis.cancel();
 
     if (this.state.userID === '') {
       this.setState({
-        vocalization: {
+        fetchResult: {
           error: 'Please type your user AMT ID in the provided input'
         }
       });
       return;
     }
 
-    this.setState({
-      vocalization: {
-        fetching: true
-      }
+    this.setState({ fetchResult: { fetching: true } });
+
+    let body = JSON.stringify({
+      relationName: 'bitstampusd',
+      timeColumnName: 'timestamp',
+      variableColumnName: 'close',
+      startDate: getDateStringFromRangeValue(this.state.range[0]),
+      endDate: getDateStringFromRangeValue(this.state.range[1]),
+      userID: this.state.userID
     });
 
-    let startDateParam = getDateStringFromRangeValue(this.state.range[0]);
-    let endDateParam = getDateStringFromRangeValue(this.state.range[1]);
+    let url = `${api_url}/query/timeseries/`
+    if (this.state.mode === 'vocalization') {
+      url = url + 'vocalization';
+    } else if (this.state.mode === 'sonification' || this.state.mode === 'visualization') {
+      url = url + 'vector';
+    }
 
-    console.log(startDateParam);
-    console.log(endDateParam);
-
-    let url = `${api_url}/query/timeseries/vocalization`
     fetch(url, {
       method: 'PUT',
-      body: JSON.stringify({
-        relationName: 'bitstampusd',
-        timeColumnName: 'timestamp',
-        variableColumnName: 'close',
-        startDate: startDateParam,
-        endDate: endDateParam,
-        userID: this.state.userID
-      }),
+      body,
       headers: new Headers({
         'Content-Type': 'application/json'
       })
@@ -87,77 +89,50 @@ class App extends Component {
     .then(response => response.json())
     .then(json => {
       if (json.error) {
-        this.setState({ vocalization: { fetching: false, error: json.message }});
+        this.setState({ fetchResult: { fetching: false, error: json.message }});
       } else {
-        this.setState({ vocalization: { fetching: false, result: json.vocalization }});
-        this.playVoiceOutput(json.vocalization);
+        this.setState({ fetchResult: { fetching: false }});
+
+        if (this.state.mode === 'vocalization') {
+          this.handleVocalizationResult(json);
+        } else if (this.state.mode === 'sonification') {
+          this.handleSonificationResult(json);
+        }
       }
     })
     .catch(error => {
       console.log(error);
-      this.setState({ vocalization: { fetching: false, error: 'We were unable to connect to CiceroDB' }});
+      this.setState({ fetchResult: { fetching: false, error: 'We were unable to connect to CiceroDB' }});
     });
-  }
-
-  playVoiceOutput(msg) {
-    var synth = window.speechSynthesis;
-    var voices = synth.getVoices();
-    var voiceOutput = new SpeechSynthesisUtterance(msg);
-    for (var i = 0; i < voices.length; i++) {
-      if (voices[i].voiceURI === 'Google UK English Female') {
-        voiceOutput.voice = voices[i];
-        break;
-      }
-    }
-    synth.speak(voiceOutput);
-  }
-
-  handleUserIDChange = (event) => {
-    this.setState({ userID: event.target.value});
   }
 
   render() {
     return (
       <div className="App">
         <CiceroNavbar />
-
         <div className="container">
           <NotChromeWarning />
-
           <Intro />
-
-          <Row>
-            <Col md={6} style={{ textAlign: "left", marginLeft: "20px" }}>
-              <input
-                style={{ width: "300px" }}
-                className="pt-input"
-                type="text"
-                placeholder="Enter your AMT user ID"
-                onChange={this.handleUserIDChange}
-              />
-            </Col>
-          </Row>
-
+          <UserIdInput
+            setUserId={this.setUserId}
+          />
           <TimeRangeSlider
             range={this.state.range}
             setTimeRange={this.setTimeRange}
           />
-
           <Row style={{ margin: "10px", textAlign: "center" }}>
             <Col md={12}>
               <Button
-                disabled={this.state.vocalization.fetching}
-                onClick={this.getVocalization}
+                disabled={this.state.fetchResult.fetching}
+                onClick={this.fetchResult}
               >
-                Get Vocalization
+                Get Result
               </Button>
             </Col>
           </Row>
-
-          <VocalizationResult
-            fetching={this.state.vocalization.fetching}
-            error={this.state.vocalization.error}
-            result={this.state.vocalization.result}
+          <FetchResult
+            fetching={this.state.fetchResult.fetching}
+            error={this.state.fetchResult.error}
           />
         </div>
       </div>

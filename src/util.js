@@ -17,3 +17,29 @@ export const getDateStringFromRangeValue = (value) => {
   let year = 2011 + Math.trunc(value / 12);
   return `${year}-${formattedMonth}-01`; // yyyy-MM-dd
 }
+
+export const playVocalization = (msg) => {
+  var synth = window.speechSynthesis;
+  var voices = synth.getVoices();
+  var voiceOutput = new SpeechSynthesisUtterance(msg);
+  for (var i = 0; i < voices.length; i++) {
+    if (voices[i].voiceURI === 'Google UK English Female') {
+      voiceOutput.voice = voices[i];
+      break;
+    }
+  }
+  synth.speak(voiceOutput);
+}
+
+export const playSonification = (values) => {
+  if (values.length === 0) {
+    return;
+  }
+  console.log('Playing sonification for values ' + values);
+
+  var minVal = Math.min(...values);
+  var maxVal = Math.max(...values);
+
+  console.log('Min Value: ', minVal);
+  console.log('Max Value: ', maxVal);
+}

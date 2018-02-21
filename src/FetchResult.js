@@ -1,14 +1,8 @@
 import React, { Component } from 'react';
-import {
-  Spinner,
-  Callout,
-} from '@blueprintjs/core';
-import {
-  Row,
-  Col,
-} from 'react-bootstrap';
+import { Spinner, Callout } from '@blueprintjs/core';
+import { Row, Col } from 'react-bootstrap';
 
-class VocalizationResult extends Component {
+class FetchResult extends Component {
   render() {
     let props = this.props;
 
@@ -46,4 +40,4 @@ class VocalizationResult extends Component {
   }
 }
 
-export default VocalizationResult;
+export default FetchResult;
