@@ -81,12 +81,7 @@ class App extends Component {
       userID: this.state.userID
     });
 
-    let url = `${api_url}/query/timeseries/`
-    if (this.state.mode === 'vocalization') {
-      url = url + 'vocalization';
-    } else if (this.state.mode === 'sonification' || this.state.mode === 'visualization') {
-      url = url + 'vector';
-    }
+    let url = `${api_url}/query/timeseries/${this.state.mode}`;
 
     fetch(url, {
       method: 'PUT',
