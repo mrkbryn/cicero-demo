@@ -132,19 +132,18 @@ class App extends Component {
                 disabled={this.state.fetchResult.fetching}
                 onClick={this.fetchResult}
               >
-                Get Result
+                Hear Result
               </Button>
             </Col>
           </Row>
           <RadioGroup style={{ marginLeft: "20px" }}
-            label="Demo Mode"
+            label="Output Method"
             onChange={e => this.setMode(e.target.value)}
             selectedValue={this.state.mode}
             inline={true}
           >
             <Radio label="Vocalization" value="vocalization" />
             <Radio label="Sonification" value="sonification" />
-            <Radio label="Visualization" value="visualization" />
           </RadioGroup>
           <FetchResult
             fetching={this.state.fetchResult.fetching}
