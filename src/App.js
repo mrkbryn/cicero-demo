@@ -17,7 +17,6 @@ class App extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      mode: 'vocalization',
       range: [0,95],
       fetchResult: {
         fetching: false,
@@ -64,7 +63,16 @@ class App extends Component {
     if (this.state.userID === '') {
       this.setState({
         fetchResult: {
-          error: 'Please type your user AMT ID in the provided input'
+          error: 'Please type your AMT ID in the provided input'
+        }
+      });
+      return;
+    }
+
+    if (this.state.mode === undefined) {
+      this.setState({
+        fetchResult: {
+          error: 'Please select an output method'
         }
       });
       return;
