@@ -1,11 +1,12 @@
 {
   "name": "time-series-ui",
-  "version": "0.1.4",
+  "version": "0.1.5",
   "private": true,
   "dependencies": {
     "@blueprintjs/core": "^1.35.2",
     "@blueprintjs/datetime": "^1.25.2",
     "bootstrap": "^3.3.7",
+    "chart.js": "^2.7.1",
     "cross-fetch": "^1.1.1",
     "fetch": "^1.1.0",
     "react": "^16.2.0",

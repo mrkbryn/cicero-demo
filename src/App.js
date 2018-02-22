@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import './App.css';
-import { Button } from '@blueprintjs/core';
+import { Button, Radio, RadioGroup } from '@blueprintjs/core';
 import { Row, Col } from 'react-bootstrap';
 import CiceroNavbar from './CiceroNavbar';
 import Intro from './Intro';
@@ -16,7 +16,7 @@ class App extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      mode: 'sonification',
+      mode: 'vocalization',
       range: [0,95],
       fetchResult: {
         fetching: false,
@@ -41,12 +41,20 @@ class App extends Component {
     });
   }
 
+  setMode = (mode) => {
+    this.setState({ mode });
+  }
+
   handleVocalizationResult = (json) => {
     playVocalization(json.vocalization);
   }
 
   handleSonificationResult = (json) => {
     playSonification(json.values);
+  }
+
+  handleVisualizationResult = (json) => {
+    // TODO:
   }
 
   fetchResult = (e) => {
@@ -130,6 +138,16 @@ class App extends Component {
               </Button>
             </Col>
           </Row>
+          <RadioGroup style={{ marginLeft: "20px" }}
+            label="Demo Mode"
+            onChange={e => this.setMode(e.target.value)}
+            selectedValue={this.state.mode}
+            inline={true}
+          >
+            <Radio label="Vocalization" value="vocalization" />
+            <Radio label="Sonification" value="sonification" />
+            <Radio label="Visualization" value="visualization" />
+          </RadioGroup>
           <FetchResult
             fetching={this.state.fetchResult.fetching}
             error={this.state.fetchResult.error}
