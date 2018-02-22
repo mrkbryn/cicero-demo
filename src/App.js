@@ -6,6 +6,7 @@ import CiceroNavbar from './CiceroNavbar';
 import Intro from './Intro';
 import UserIdInput from './UserIdInput';
 import TimeRangeSlider from './TimeRangeSlider';
+import TimeRangeVisualization from './TimeRangeVisualization';
 import FetchResult from './FetchResult';
 import NotChromeWarning from './NotChromeWarning';
 import { getDateStringFromRangeValue, playVocalization, playSonification } from './util';
@@ -54,7 +55,7 @@ class App extends Component {
   }
 
   handleVisualizationResult = (json) => {
-    // TODO:
+    this.setState({ fetchResult: { fetching: false, values: json.values }});
   }
 
   fetchResult = (e) => {
@@ -105,6 +106,8 @@ class App extends Component {
           this.handleVocalizationResult(json);
         } else if (this.state.mode === 'sonification') {
           this.handleSonificationResult(json);
+        } else if (this.state.mode === 'visualization') {
+          this.handleVisualizationResult(json);
         }
       }
     })
@@ -152,6 +155,11 @@ class App extends Component {
             fetching={this.state.fetchResult.fetching}
             error={this.state.fetchResult.error}
           />
+          {this.state.mode === 'visualization' && !this.state.fetchResult.fetching && this.state.fetchResult.values &&
+              <TimeRangeVisualization
+                values={this.state.fetchResult.values}
+              />
+          }
         </div>
       </div>
     );

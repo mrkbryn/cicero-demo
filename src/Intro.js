@@ -8,7 +8,7 @@ class Intro extends Component {
         <p>
           At the bottom of this page, there is a timeline representing the price of a financial asset
           for when it traded from December 2011 to January 2018. Use the left and right markers on
-          the timeline to select a time range. Then, click the 'Get Vocalization' button to generate
+          the timeline to select a time range. Then, click the 'Get Result' button to generate
           and hear a voice description of how the price of the asset has evolved over the selected time range.
         </p>
         <p>
