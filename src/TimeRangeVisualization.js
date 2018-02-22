@@ -8,8 +8,12 @@ const Plot = createPlotlyComponent(Plotly);
 class TimeRangeVisualization extends Component {
   render() {
     let xValues = [];
+    let yValues = [];
     for (var i = 0; i < this.props.values.length; i++) {
-      xValues.push(i);
+      if (this.props.values[i] !== 'null') {
+        xValues.push(i);
+        yValues.push(this.props.values[i]);
+      }
     }
 
     return (
@@ -19,7 +23,7 @@ class TimeRangeVisualization extends Component {
             data={[{
               type: 'scatter',
               x: xValues,
-              y: this.props.values
+              y: yValues
             }]}
             layout={{
               width: 800,

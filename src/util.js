@@ -47,8 +47,10 @@ export const playSonification = (values) => {
   let oscillator = audioCtx.createOscillator();
 
   for (var i = 0; i < values.length; i++) {
-    let scaledFrequency = minimumFrequency + (maximumFrequency - minimumFrequency) * ((values[i] - minVal) / range);
-    oscillator.frequency.setValueAtTime(scaledFrequency, audioCtx.currentTime + (i * 0.5));
+    if (values[i] !== 'null') {
+      let scaledFrequency = minimumFrequency + (maximumFrequency - minimumFrequency) * ((values[i] - minVal) / range);
+      oscillator.frequency.setValueAtTime(scaledFrequency, audioCtx.currentTime + (i * 0.5));
+    }
   }
 
   oscillator.connect(audioCtx.destination);
