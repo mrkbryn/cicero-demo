@@ -12,7 +12,7 @@ class CiceroNavbar extends Component {
     return (
       <Navbar className="pt-dark">
         <NavbarGroup>
-          <NavbarHeading>Cicero - Time Series Vocalization</NavbarHeading>
+          <NavbarHeading>Time Series Visualization</NavbarHeading>
         </NavbarGroup>
         <NavbarGroup align="right">
           <span>Cornell Database Group</span>
