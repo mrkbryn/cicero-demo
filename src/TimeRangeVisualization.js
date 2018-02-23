@@ -29,7 +29,13 @@ class TimeRangeVisualization extends Component {
               width: 800,
               height: 600,
               xaxis: {
-                title: 'Unit of Time Within Time Range (months, years, or half-years)'
+                autorange: true,
+                showgrid: false,
+                zeroline: false,
+                showline: false,
+                autotick: true,
+                ticks: "",
+                showticklabels: false
               },
               yaxis: {
                 title: 'Price'
