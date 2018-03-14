@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { getMonthDisplayForIndex } from './util';
+import { getMonthDisplayForIndex } from '../util';
 import {
   Row,
   Col,
