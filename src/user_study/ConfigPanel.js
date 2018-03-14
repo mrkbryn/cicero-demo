@@ -1,16 +1,8 @@
 import React, { Component } from 'react';
-import {
-  Callout,
-  RadioGroup,
-  Radio,
-} from '@blueprintjs/core';
-import {
-  Row,
-  Col,
-} from 'react-bootstrap';
+import { Callout, RadioGroup, Radio } from '@blueprintjs/core';
+import { Row, Col } from 'react-bootstrap';
 
 class ConfigPanel extends Component {
-
   handleVoiceGenerationChange(value) {
     if (value === 'sampling') {
       this.props.selectSampling();
