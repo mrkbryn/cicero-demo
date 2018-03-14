@@ -4,9 +4,34 @@ import { Button, Card, TextArea } from '@blueprintjs/core'
 import { Row, Col } from 'react-bootstrap'
 import SpeechRecognition from 'react-speech-recognition'
 
+// TODO: this should be fetched from the backend and will populate the Card display
+const tables = [
+  {
+    'tableName': 'chicago_crimes',
+    'keywords': ['chicago']
+  },
+  {
+    'tableName': 'bitstampusd',
+    'keywords': ['bitcoin']
+  },
+  {
+    'tableName': 'darksky',
+    'keywords': ['dark sky', 'new york', 'new york city']
+  }
+];
+
 class VoiceInterface extends Component {
+  constructor(props) {
+    super(props)
+    this.state = {
+      parsedTableName: '',
+      firstDate: undefined,
+      secondDate: undefined
+    }
+  }
+
   componentWillReceiveProps(props) {
-    this.parseTranscript(props.transcript)
+    this.parseTranscript()
   }
 
   toggleListening = () => {
@@ -18,8 +43,36 @@ class VoiceInterface extends Component {
     }
   }
 
-  parseTranscript = transcript => {
-    console.log('parsing transcript: ', transcript)
+  parseTranscript = () => {
+    // TODO: this should probably just parse the finalTranscript prop
+    var transcript = this.props.transcript.toLowerCase();
+    if (this.parseTableName(transcript)) {
+      this.parseDates(transcript);
+    }
+  }
+
+  parseTableName = transcript => {
+    var foundTableKeyword = false;
+    for (var i = 0; i < tables.length; i++) {
+      var table = tables[i];
+      var keywords = table['keywords'];
+      for (var j = 0; j < keywords.length; j++) {
+        if (transcript.indexOf(keywords[j]) !== -1) {
+          this.setState({ parsedTableName: table.tableName })
+          foundTableKeyword = true;
+          break;
+        }
+      }
+      if (foundTableKeyword) {
+        break;
+      }
+    }
+    return foundTableKeyword;
+  }
+
+  parseDates = transcript => {
+    console.log('Trying to parse dates from transcript')
+    // TODO: use regex to match dates... and set firstDate and secondDate to state
   }
 
   render() {
@@ -72,6 +125,10 @@ class VoiceInterface extends Component {
           >
             {buttonText}
           </Button>
+        </Row>
+
+        <Row>
+          <span>Parsed Table Name: {this.state.parsedTableName}</span>
         </Row>
       </div>
     )
