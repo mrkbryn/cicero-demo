@@ -1,8 +1,11 @@
 import React, { Component } from 'react'
 import NotChromeWarning from '../common/NotChromeWarning'
-import { Button, Card, TextArea } from '@blueprintjs/core'
+import { Button, TextArea } from '@blueprintjs/core'
 import { Row, Col } from 'react-bootstrap'
 import SpeechRecognition from 'react-speech-recognition'
+import DataCards from './DataCards'
+
+var MONTH_YEAR_REGEX = /(january|february|march|april|may|june|july|august|september|october|november|december) ([0-9]{4})/g;
 
 // TODO: this should be fetched from the backend and will populate the Card display
 const tables = [
@@ -72,7 +75,21 @@ class VoiceInterface extends Component {
 
   parseDates = transcript => {
     console.log('Trying to parse dates from transcript')
-    // TODO: use regex to match dates... and set firstDate and secondDate to state
+    var match = transcript.match(MONTH_YEAR_REGEX);
+    if (match) {
+      if (match.length === 1) {
+        this.setState({ firstDate: new Date(match[0]) })
+      } else {
+        var d1 = new Date(match[match.length-1]);
+        var d2 = new Date(match[match.length-2]);
+        this.setState({
+          firstDate: d1 < d2 ? d1 : d2,
+          secondDate: d1 < d2 ? d2 : d1
+        });
+        return true;
+      }
+    }
+    return false;
   }
 
   render() {
@@ -82,28 +99,7 @@ class VoiceInterface extends Component {
       <div style={{ margin: "20px", align: "left" }}>
         <NotChromeWarning />
         <h1 className="display-4">Voice Interface</h1>
-        <h3>Available Datasets</h3>
-        <Row>
-          <Col md={4}>
-            <Card interactive={true} elevation={Card.ELEVATION_TWO}>
-              <h5>Bitcoin</h5>
-              <p>Keywords: "bitcoin"</p>
-              <p>Data time range: 2011 to January 2018</p>
-            </Card>
-          </Col>
-          <Col md={4}>
-            <Card interactive={true} elevation={Card.ELEVATION_TWO}>
-              <h5>New York City Weather Data</h5>
-              <p>Keywords: "NYC", "New York", "New York City", "weather"</p>
-            </Card>
-          </Col>
-          <Col md={4}>
-            <Card interactive={true} elevation={Card.ELEVATION_TWO}>
-              <h5>Chicago Crimes</h5>
-              <p>Keywords: "Chicago", "crime rate"</p>
-            </Card>
-          </Col>
-        </Row>
+        <DataCards />
         <p>
           Try saying...
         </p>
@@ -128,7 +124,15 @@ class VoiceInterface extends Component {
         </Row>
 
         <Row>
-          <span>Parsed Table Name: {this.state.parsedTableName}</span>
+          <Col md={6}>
+            Parsed Table Name: {this.state.parsedTableName}
+          </Col>
+          <Col md={3}>
+            Start Date: {this.state.firstDate}
+          </Col>
+          <Col md={3}>
+            End Date: {this.state.secondDate}
+          </Col>
         </Row>
       </div>
     )
