@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import NotChromeWarning from '../common/NotChromeWarning'
-import { Button, TextArea } from '@blueprintjs/core'
+import { Button, TextArea, Icon, Tag } from '@blueprintjs/core'
 import { Row, Col } from 'react-bootstrap'
 import SpeechRecognition from 'react-speech-recognition'
 import DataCards from './DataCards'
@@ -11,15 +11,24 @@ var MONTH_YEAR_REGEX = /(january|february|march|april|may|june|july|august|septe
 const tables = [
   {
     'tableName': 'chicago_crimes',
-    'keywords': ['chicago']
+    'description': 'The crimes committed in Chicago.',
+    'keywords': ['chicago', 'crime'],
+    'earliestDate': new Date('January 1, 2001'),
+    'latestDate': new Date('January 18, 2017')
   },
   {
     'tableName': 'bitstampusd',
-    'keywords': ['bitcoin']
+    'description': 'The closing prices of Bitcoin on the Bitstamp exchange.',
+    'keywords': ['bitcoin'],
+    'earliestDate': new Date('December 31, 2011'),
+    'latestDate': new Date('January 8, 2018')
   },
   {
     'tableName': 'darksky',
-    'keywords': ['dark sky', 'new york', 'new york city']
+    'description': 'Temperature data for New York City.',
+    'keywords': ['dark sky', 'new york', 'new york city'],
+    'earliestDate': new Date('January 1, 2013'),
+    'latestDate': new Date('January 1, 2017')
   }
 ];
 
@@ -27,7 +36,7 @@ class VoiceInterface extends Component {
   constructor(props) {
     super(props)
     this.state = {
-      parsedTableName: '',
+      selectedTable: '',
       firstDate: undefined,
       secondDate: undefined
     }
@@ -61,7 +70,7 @@ class VoiceInterface extends Component {
       var keywords = table['keywords'];
       for (var j = 0; j < keywords.length; j++) {
         if (transcript.indexOf(keywords[j]) !== -1) {
-          this.setState({ parsedTableName: table.tableName })
+          this.setState({ selectedTable: table.tableName })
           foundTableKeyword = true;
           break;
         }
@@ -74,7 +83,6 @@ class VoiceInterface extends Component {
   }
 
   parseDates = transcript => {
-    console.log('Trying to parse dates from transcript')
     var match = transcript.match(MONTH_YEAR_REGEX);
     if (match) {
       if (match.length === 1) {
@@ -94,44 +102,58 @@ class VoiceInterface extends Component {
 
   render() {
     var buttonText = this.props.listening ? 'Stop Listening' : 'Start Listening'
+    var firstDateString = this.state.firstDate ? this.state.firstDate.toDateString() : "no start date";
+    var secondDateString = this.state.secondDate ? this.state.secondDate.toDateString() : "no end date";
 
     return (
       <div style={{ margin: "20px", align: "left" }}>
         <NotChromeWarning />
-        <h1 className="display-4">Voice Interface</h1>
-        <DataCards />
-        <p>
-          Try saying...
-        </p>
-        <ul>
-          <li>"Tell me about Bitcoin from 2012 to 2014"</li>
-          <li>"What was the weather in NYC from January 2011 to August 2011"</li>
-        </ul>
+        <DataCards
+          tables={tables}
+        />
+
+        <div style={{ margin: "20px"}}>
+          <p>
+            Try saying...
+          </p>
+          <ul>
+            <li>"Tell me about Bitcoin from January 2012 to December 2012"</li>
+            <li>"What was the weather in NYC from January 2011 to August 2011"</li>
+          </ul>
+        </div>
 
         <Row>
+          <Col md={12}>
           <TextArea
             className="pt-fill"
             value={this.props.transcript}
           />
+          </Col>
         </Row>
 
-        <Row>
-          <Button
-            onClick={this.toggleListening}
-          >
-            {buttonText}
-          </Button>
+        <Row style={{ margin: "10px", textAlign: "center" }}>
+          <Col md={12}>
+            <Button
+              onClick={this.toggleListening}
+            >
+              {buttonText}
+            </Button>
+          </Col>
         </Row>
 
-        <Row>
-          <Col md={6}>
-            Parsed Table Name: {this.state.parsedTableName}
+        <Row style={{ margin: "10px" }}>
+          <Col md={8} style={{ textAlign: "left" }}>
+            Selected Table: {this.state.selectedTable}
           </Col>
-          <Col md={3}>
-            Start Date: {this.state.firstDate}
-          </Col>
-          <Col md={3}>
-            End Date: {this.state.secondDate}
+          <Col md={4} style={{ textAlign: "right" }}>
+            Time Range:
+            <Tag className="pt-large pt-intent-primary" style={{ margin: "5px" }}>
+                {firstDateString}
+            </Tag>
+            <Icon iconName="arrow-right" iconSize={20} />
+            <Tag className="pt-large pt-intent-primary" style={{ margin: "5px" }}>
+                {secondDateString}
+            </Tag>
           </Col>
         </Row>
       </div>
