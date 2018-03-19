@@ -13,7 +13,7 @@ class DataCards extends Component {
           return (
             <div key={table.tableName} style={style}>
               <Col>
-              <Card interactive={true} elevation={Card.ELEVATION_TWO}>
+              <Card elevation={table.tableName === this.props.selectedTable ? Card.ELEVATION_FOUR : Card.ELEVATION_TWO}>
                 <h5>{table.tableName}</h5>
                 <p>{table.description}</p>
                 Keywords:

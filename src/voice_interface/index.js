@@ -1,9 +1,10 @@
 import React, { Component } from 'react'
 import NotChromeWarning from '../common/NotChromeWarning'
-import { Button, TextArea, Icon, Tag } from '@blueprintjs/core'
+import { Button, TextArea } from '@blueprintjs/core'
 import { Row, Col } from 'react-bootstrap'
 import SpeechRecognition from 'react-speech-recognition'
 import DataCards from './DataCards'
+import TimeRangeDisplay from './TimeRangeDisplay'
 
 var MONTH_YEAR_REGEX = /(january|february|march|april|may|june|july|august|september|october|november|december) ([0-9]{4})/g;
 
@@ -100,9 +101,6 @@ class VoiceInterface extends Component {
   }
 
   render() {
-    var firstDateString = this.state.firstDate ? this.state.firstDate.toDateString() : "no start date";
-    var secondDateString = this.state.secondDate ? this.state.secondDate.toDateString() : "no end date";
-
     return (
       <div style={{ margin: "20px", align: "left" }}>
         <NotChromeWarning />
@@ -137,18 +135,11 @@ class VoiceInterface extends Component {
         </Row>
 
         <Row style={{ margin: "10px" }}>
-          <Col md={8} style={{ textAlign: "left" }}>
-            Selected Table: {this.state.selectedTable}
-          </Col>
-          <Col md={4} style={{ textAlign: "right" }}>
-            Time Range:
-            <Tag className="pt-large pt-intent-primary" style={{ margin: "5px" }}>
-                {firstDateString}
-            </Tag>
-            <Icon iconName="arrow-right" iconSize={20} />
-            <Tag className="pt-large pt-intent-primary" style={{ margin: "5px" }}>
-                {secondDateString}
-            </Tag>
+          <Col>
+            <TimeRangeDisplay
+              firstDate={this.state.firstDate}
+              secondDate={this.state.secondDate}
+            />
           </Col>
         </Row>
       </div>
