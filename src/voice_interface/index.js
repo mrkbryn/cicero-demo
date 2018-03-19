@@ -46,13 +46,12 @@ class VoiceInterface extends Component {
     this.parseTranscript()
   }
 
-  toggleListening = () => {
-    if (this.props.listening) {
-      this.props.stopListening()
-    } else {
-      this.props.resetTranscript()
-      this.props.startListening()
-    }
+  componentDidMount() {
+    this.props.startListening()
+  }
+
+  componentWillUnmount() {
+    this.props.stopListening()
   }
 
   parseTranscript = () => {
@@ -101,7 +100,6 @@ class VoiceInterface extends Component {
   }
 
   render() {
-    var buttonText = this.props.listening ? 'Stop Listening' : 'Start Listening'
     var firstDateString = this.state.firstDate ? this.state.firstDate.toDateString() : "no start date";
     var secondDateString = this.state.secondDate ? this.state.secondDate.toDateString() : "no end date";
 
@@ -110,6 +108,7 @@ class VoiceInterface extends Component {
         <NotChromeWarning />
         <DataCards
           tables={tables}
+          selectedTable={this.state.selectedTable}
         />
 
         <div style={{ margin: "20px"}}>
@@ -133,11 +132,7 @@ class VoiceInterface extends Component {
 
         <Row style={{ margin: "10px", textAlign: "center" }}>
           <Col md={12}>
-            <Button
-              onClick={this.toggleListening}
-            >
-              {buttonText}
-            </Button>
+            <Button onClick={this.props.resetTranscript}>Reset Transcript</Button>
           </Col>
         </Row>
 

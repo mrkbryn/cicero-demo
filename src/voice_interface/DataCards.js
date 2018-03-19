@@ -9,14 +9,15 @@ class DataCards extends Component {
         <h3>Available Datasets</h3>
         <Row>
         {this.props.tables.map(table => {
+          let style = { margin: "10px" };
           return (
-            <div key={table.tableName} style={{ margin: "10px" }}>
+            <div key={table.tableName} style={style}>
               <Col>
               <Card interactive={true} elevation={Card.ELEVATION_TWO}>
                 <h5>{table.tableName}</h5>
                 <p>{table.description}</p>
                 Keywords:
-                {table.keywords.map(keyword => <Tag style={{ margin: "5px" }}>{keyword}</Tag>)}
+                {table.keywords.map(keyword => <Tag key={keyword} style={{ margin: "5px" }}>{keyword}</Tag>)}
                 <div>
                 {table.earliestDate.toDateString()} <Icon iconName="arrow-right" iconSize={20} /> {table.latestDate.toDateString()}
                 </div>
