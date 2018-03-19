@@ -1,10 +1,11 @@
 import React, { Component } from 'react'
 import NotChromeWarning from '../common/NotChromeWarning'
-import { Button, TextArea } from '@blueprintjs/core'
+import { Button } from '@blueprintjs/core'
 import { Row, Col } from 'react-bootstrap'
 import SpeechRecognition from 'react-speech-recognition'
 import DataCards from './DataCards'
 import TimeRangeDisplay from './TimeRangeDisplay'
+import TranscriptDisplay from './TranscriptDisplay'
 
 var MONTH_YEAR_REGEX = /(january|february|march|april|may|june|july|august|september|october|november|december) ([0-9]{4})/g;
 
@@ -56,8 +57,7 @@ class VoiceInterface extends Component {
   }
 
   parseTranscript = () => {
-    // TODO: this should probably just parse the finalTranscript prop
-    var transcript = this.props.transcript.toLowerCase();
+    var transcript = this.props.finalTranscript.toLowerCase();
     if (this.parseTableName(transcript)) {
       this.parseDates(transcript);
     }
@@ -121,10 +121,10 @@ class VoiceInterface extends Component {
 
         <Row>
           <Col md={12}>
-          <TextArea
-            className="pt-fill"
-            value={this.props.transcript}
-          />
+            <TranscriptDisplay
+              finalTranscript={this.props.finalTranscript}
+              interimTranscript={this.props.interimTranscript}
+            />
           </Col>
         </Row>
 
