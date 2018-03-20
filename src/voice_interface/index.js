@@ -6,41 +6,19 @@ import SpeechRecognition from 'react-speech-recognition'
 import DataCards from './DataCards'
 import TimeRangeDisplay from './TimeRangeDisplay'
 import TranscriptDisplay from './TranscriptDisplay'
-
-var MONTH_YEAR_REGEX = /(january|february|march|april|may|june|july|august|september|october|november|december) ([0-9]{4})/g;
-
-// TODO: this should be fetched from the backend and will populate the Card display
-const tables = [
-  {
-    'tableName': 'chicago_crimes',
-    'description': 'The crimes committed in Chicago.',
-    'keywords': ['chicago', 'crime'],
-    'earliestDate': new Date('January 1, 2001'),
-    'latestDate': new Date('January 18, 2017')
-  },
-  {
-    'tableName': 'bitstampusd',
-    'description': 'The closing prices of Bitcoin on the Bitstamp exchange.',
-    'keywords': ['bitcoin'],
-    'earliestDate': new Date('December 31, 2011'),
-    'latestDate': new Date('January 8, 2018')
-  },
-  {
-    'tableName': 'darksky',
-    'description': 'Temperature data for New York City.',
-    'keywords': ['dark sky', 'new york', 'new york city'],
-    'earliestDate': new Date('January 1, 2013'),
-    'latestDate': new Date('January 1, 2017')
-  }
-];
+import { fetchGetRelationMetadata } from '../api'
+import { parseDates } from './speechRecognition'
 
 class VoiceInterface extends Component {
   constructor(props) {
     super(props)
     this.state = {
+      tablesFetch: {
+        fetching: false,
+      },
+      tables: [],
       selectedTable: '',
-      firstDate: undefined,
-      secondDate: undefined
+      dateRange: [undefined, undefined]
     }
   }
 
@@ -49,6 +27,17 @@ class VoiceInterface extends Component {
   }
 
   componentDidMount() {
+    this.setState({ tablesFetch: { fetching: true }})
+    fetchGetRelationMetadata()
+    .then(response => response.json())
+    .then(json => {
+      console.log(json)
+      if (json.error) {
+        this.setState({ tablesFetch: { fetching: false, error: json.error }})
+      } else {
+        this.setState({ tablesFetch: { fetching: false }, tables: json })
+      }
+    })
     this.props.startListening()
   }
 
@@ -65,8 +54,8 @@ class VoiceInterface extends Component {
 
   parseTableName = transcript => {
     var foundTableKeyword = false;
-    for (var i = 0; i < tables.length; i++) {
-      var table = tables[i];
+    for (var i = 0; i < this.state.tables.length; i++) {
+      var table = this.state.tables[i];
       var keywords = table['keywords'];
       for (var j = 0; j < keywords.length; j++) {
         if (transcript.indexOf(keywords[j]) !== -1) {
@@ -83,21 +72,7 @@ class VoiceInterface extends Component {
   }
 
   parseDates = transcript => {
-    var match = transcript.match(MONTH_YEAR_REGEX);
-    if (match) {
-      if (match.length === 1) {
-        this.setState({ firstDate: new Date(match[0]) })
-      } else {
-        var d1 = new Date(match[match.length-1]);
-        var d2 = new Date(match[match.length-2]);
-        this.setState({
-          firstDate: d1 < d2 ? d1 : d2,
-          secondDate: d1 < d2 ? d2 : d1
-        });
-        return true;
-      }
-    }
-    return false;
+    this.setState({ dateRange: parseDates(transcript) })
   }
 
   render() {
@@ -105,7 +80,8 @@ class VoiceInterface extends Component {
       <div style={{ margin: "20px", align: "left" }}>
         <NotChromeWarning />
         <DataCards
-          tables={tables}
+          tablesFetch={this.state.tablesFetch}
+          tables={this.state.tables}
           selectedTable={this.state.selectedTable}
         />
 
