@@ -46,7 +46,7 @@ class VoiceInterface extends Component {
   }
 
   parseTranscript = () => {
-    var transcript = this.props.finalTranscript.toLowerCase();
+    var transcript = this.props.transcript.toLowerCase();
     if (this.parseTableName(transcript)) {
       this.parseDates(transcript);
     }
@@ -91,7 +91,7 @@ class VoiceInterface extends Component {
           </p>
           <ul>
             <li>"Tell me about Bitcoin from January 2012 to December 2012"</li>
-            <li>"What was the weather in NYC from January 2011 to August 2011"</li>
+            <li>"What was the weather in New York City from January 2011 to August 2011"</li>
           </ul>
         </div>
 
@@ -113,10 +113,13 @@ class VoiceInterface extends Component {
         <Row style={{ margin: "10px" }}>
           <Col>
             <TimeRangeDisplay
-              firstDate={this.state.firstDate}
-              secondDate={this.state.secondDate}
+              firstDate={this.state.dateRange[0]}
+              secondDate={this.state.dateRange[1]}
             />
           </Col>
+        </Row>
+        <Row style={{ margin: "10px"}}>
+          <p>Selected Table: {this.state.selectedTable}</p>
         </Row>
       </div>
     )
