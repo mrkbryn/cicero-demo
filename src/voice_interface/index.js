@@ -41,7 +41,7 @@ class VoiceInterface extends Component {
   }
 
   parseTranscript = () => {
-    var transcript = this.props.transcript.toLowerCase();
+    var transcript = this.props.finalTranscript.toLowerCase();
     if (this.parseTableName(transcript)) {
       this.parseDates(transcript);
     }
