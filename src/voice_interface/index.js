@@ -38,11 +38,6 @@ class VoiceInterface extends Component {
         this.setState({ tablesFetch: { fetching: false }, tables: json })
       }
     })
-    this.props.startListening()
-  }
-
-  componentWillUnmount() {
-    this.props.stopListening()
   }
 
   parseTranscript = () => {
@@ -126,4 +121,4 @@ class VoiceInterface extends Component {
   }
 }
 
-export default SpeechRecognition({ autoStart: false })(VoiceInterface)
+export default SpeechRecognition(VoiceInterface)
