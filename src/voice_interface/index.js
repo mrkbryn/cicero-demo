@@ -21,6 +21,14 @@ class VoiceInterface extends Component {
         fetching: false
       }
     }
+
+    var SpeechGrammarList = window.webkitSpeechGrammarList
+    if (SpeechGrammarList) {
+      var grammar = '#JSGF V1.0; grammar name; public <name> = cicero ;'
+      var speechRecognitionList = new SpeechGrammarList();
+      speechRecognitionList.addFromString(grammar, 1);
+      this.props.recognition.grammars = speechRecognitionList;
+    }
   }
 
   componentDidMount() {
