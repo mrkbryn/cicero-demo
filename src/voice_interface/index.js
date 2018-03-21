@@ -1,14 +1,13 @@
 import React, { Component } from 'react'
 import NotChromeWarning from '../common/NotChromeWarning'
-import { Spinner } from '@blueprintjs/core'
 import { Row, Col } from 'react-bootstrap'
 import SpeechRecognition from 'react-speech-recognition'
 import DataCards from './DataCards'
 import TranscriptDisplay from './TranscriptDisplay'
 import { fetchGetRelationMetadata, fetchVocalization } from '../api'
 import { parseDates, parseTableName } from './speechRecognition'
-import { playVocalization } from '../util'
 import SuggestedUse from './SuggestedUse'
+import VocalizationFetch from './VocalizationFetch'
 
 class VoiceInterface extends Component {
   constructor(props) {
@@ -21,6 +20,16 @@ class VoiceInterface extends Component {
       vocalizationFetch: {
         fetching: false
       }
+      // var synth = window.speechSynthesis;
+      // var voices = synth.getVoices();
+      // var voiceOutput = new SpeechSynthesisUtterance(msg);
+      // for (var i = 0; i < voices.length; i++) {
+      //   if (voices[i].voiceURI === 'Google UK English Female') {
+      //     voiceOutput.voice = voices[i];
+      //     break;
+      //   }
+      // }
+      // synth.speak(voiceOutput);
     }
 
     var SpeechGrammarList = window.webkitSpeechGrammarList
@@ -81,7 +90,21 @@ class VoiceInterface extends Component {
         this.setState({ vocalizationFetch: { fetching: false, error: json.message }})
       } else {
         this.setState({ vocalizationFetch: { fetching: false, vocalization: json.vocalization }})
-        playVocalization(json.vocalization)
+        var synth = window.speechSynthesis;
+        var voices = synth.getVoices();
+        var voiceOutput = new SpeechSynthesisUtterance(json.vocalization);
+        for (var i = 0; i < voices.length; i++) {
+          if (voices[i].voiceURI === 'Google UK English Female') {
+            voiceOutput.voice = voices[i];
+            break;
+          }
+        }
+        voiceOutput.onstart = this.props.stopListening
+        voiceOutput.onend = () => {
+          this.props.resetTranscript()
+          this.props.startListening()
+        }
+        synth.speak(voiceOutput);
       }
     })
   }
@@ -90,6 +113,7 @@ class VoiceInterface extends Component {
     return (
       <div style={{ margin: "20px", align: "left" }}>
         <NotChromeWarning />
+
         <DataCards
           tablesFetch={this.state.tablesFetch}
           tables={this.state.tables}
@@ -107,9 +131,9 @@ class VoiceInterface extends Component {
           </Col>
         </Row>
 
-        {this.state.vocalizationFetch.fetching &&
-          <Spinner />
-        }
+        <VocalizationFetch
+          vocalizationFetch={this.state.vocalizationFetch}
+        />
       </div>
     )
   }

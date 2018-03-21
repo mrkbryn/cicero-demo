@@ -3,7 +3,7 @@ import React, { Component } from 'react'
 class SuggestedUse extends Component {
   render() {
     return (
-      <div style={{ margin: "20px"}}>
+      <div>
         <p>
           Try saying...
         </p>

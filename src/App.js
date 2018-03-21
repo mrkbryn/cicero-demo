@@ -20,6 +20,11 @@ class App extends Component {
       </Router>
     )
   }
+
+  componentDidMount() {
+    // prepare voices
+    window.speechSynthesis.getVoices();
+  }
 }
 
 export default App;
