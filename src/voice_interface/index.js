@@ -8,6 +8,7 @@ import TranscriptDisplay from './TranscriptDisplay'
 import { fetchGetRelationMetadata, fetchVocalization } from '../api'
 import { parseDates, parseTableName } from './speechRecognition'
 import { playVocalization } from '../util'
+import SuggestedUse from './SuggestedUse'
 
 class VoiceInterface extends Component {
   constructor(props) {
@@ -95,15 +96,7 @@ class VoiceInterface extends Component {
           selectedTable={this.state.selectedTable}
         />
 
-        <div style={{ margin: "20px"}}>
-          <p>
-            Try saying...
-          </p>
-          <ul>
-            <li>"Tell me about Bitcoin from January 2012 to December 2012"</li>
-            <li>"What was the weather in New York City from January 2011 to August 2011"</li>
-          </ul>
-        </div>
+        <SuggestedUse />
 
         <Row>
           <Col md={12}>
