@@ -1,13 +1,13 @@
 import React, { Component } from 'react'
 import NotChromeWarning from '../common/NotChromeWarning'
-import { Button } from '@blueprintjs/core'
+import { Spinner } from '@blueprintjs/core'
 import { Row, Col } from 'react-bootstrap'
 import SpeechRecognition from 'react-speech-recognition'
 import DataCards from './DataCards'
-import TimeRangeDisplay from './TimeRangeDisplay'
 import TranscriptDisplay from './TranscriptDisplay'
-import { fetchGetRelationMetadata } from '../api'
-import { parseDates } from './speechRecognition'
+import { fetchGetRelationMetadata, fetchVocalization } from '../api'
+import { parseDates, parseTableName } from './speechRecognition'
+import { playVocalization } from '../util'
 
 class VoiceInterface extends Component {
   constructor(props) {
@@ -17,57 +17,64 @@ class VoiceInterface extends Component {
         fetching: false,
       },
       tables: [],
-      selectedTable: '',
-      dateRange: [undefined, undefined]
+      vocalizationFetch: {
+        fetching: false
+      }
     }
-  }
-
-  componentWillReceiveProps(props) {
-    this.parseTranscript()
   }
 
   componentDidMount() {
     this.setState({ tablesFetch: { fetching: true }})
     fetchGetRelationMetadata()
-    .then(response => response.json())
-    .then(json => {
-      console.log(json)
-      if (json.error) {
-        this.setState({ tablesFetch: { fetching: false, error: json.error }})
-      } else {
-        this.setState({ tablesFetch: { fetching: false }, tables: json })
-      }
-    })
-  }
-
-  parseTranscript = () => {
-    var transcript = this.props.finalTranscript.toLowerCase();
-    if (this.parseTableName(transcript)) {
-      this.parseDates(transcript);
-    }
-  }
-
-  parseTableName = transcript => {
-    var foundTableKeyword = false;
-    for (var i = 0; i < this.state.tables.length; i++) {
-      var table = this.state.tables[i];
-      var keywords = table['keywords'];
-      for (var j = 0; j < keywords.length; j++) {
-        if (transcript.indexOf(keywords[j]) !== -1) {
-          this.setState({ selectedTable: table.tableName })
-          foundTableKeyword = true;
-          break;
+      .then(response => response.json())
+      .then(json => {
+        if (json.error) {
+          this.setState({ tablesFetch: { fetching: false, error: json.message }})
+        } else {
+          this.setState({ tablesFetch: { fetching: false }, tables: json })
         }
-      }
-      if (foundTableKeyword) {
-        break;
+        this.props.resetTranscript()
+      })
+  }
+
+  componentWillReceiveProps(props) {
+    if (props.finalTranscript !== this.props.finalTranscript) {
+      this.parseTranscript(props.finalTranscript)
+    }
+  }
+
+  parseTranscript = (finalTranscript) => {
+    var transcript = finalTranscript.toLowerCase();
+    if (transcript.indexOf("reset transcript") !== -1) {
+      console.log('resetting transcript')
+      this.props.resetTranscript()
+    } else {
+      let tableName = parseTableName(transcript, this.state.tables)
+      let dates = parseDates(transcript)
+      console.log(tableName, dates)
+      if (tableName && dates[0] && dates[1]) {
+        this.fetchVocalizationFromBackend(tableName, dates[0], dates[1])
       }
     }
-    return foundTableKeyword;
   }
 
   parseDates = transcript => {
     this.setState({ dateRange: parseDates(transcript) })
+  }
+
+  fetchVocalizationFromBackend = (tableName, startDate, endDate) => {
+    this.setState({ vocalizationFetch: { fetching: true }})
+    fetchVocalization(tableName, startDate, endDate)
+    .then(response => response.json())
+    .then(json => {
+      console.log(json)
+      if (json.error) {
+        this.setState({ vocalizationFetch: { fetching: false, error: json.message }})
+      } else {
+        this.setState({ vocalizationFetch: { fetching: false, vocalization: json.vocalization }})
+        playVocalization(json.vocalization)
+      }
+    })
   }
 
   render() {
@@ -99,23 +106,9 @@ class VoiceInterface extends Component {
           </Col>
         </Row>
 
-        <Row style={{ margin: "10px", textAlign: "center" }}>
-          <Col md={12}>
-            <Button onClick={this.props.resetTranscript}>Reset Transcript</Button>
-          </Col>
-        </Row>
-
-        <Row style={{ margin: "10px" }}>
-          <Col>
-            <TimeRangeDisplay
-              firstDate={this.state.dateRange[0]}
-              secondDate={this.state.dateRange[1]}
-            />
-          </Col>
-        </Row>
-        <Row style={{ margin: "10px"}}>
-          <p>Selected Table: {this.state.selectedTable}</p>
-        </Row>
+        {this.state.vocalizationFetch.fetching &&
+          <Spinner />
+        }
       </div>
     )
   }

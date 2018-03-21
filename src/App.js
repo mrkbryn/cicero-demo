@@ -1,9 +1,7 @@
 import React, { Component } from 'react';
 import './App.css';
 import { BrowserRouter as Router, Route } from 'react-router-dom';
-import Home from './home';
 import VoiceInterface from './voice_interface';
-import UserStudy from './user_study';
 import CiceroNavbar from './CiceroNavbar';
 
 class App extends Component {

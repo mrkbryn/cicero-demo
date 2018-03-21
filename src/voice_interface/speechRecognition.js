@@ -1,4 +1,4 @@
-var MONTH_YEAR_REGEX = /(january|february|march|april|may|june|july|august|september|october|november|december) ([0-9]{4})/g;
+let MONTH_YEAR_REGEX = /(january|february|march|april|may|june|july|august|september|october|november|december) ([0-9]{4})/g;
 
 export const parseDates = transcript => {
   // TODO: use other REGEX to detect date speech patterns, i.e. "during 2012", "from 2012 to 2013"
@@ -15,4 +15,33 @@ export const parseDates = transcript => {
     }
   }
   return result;
+}
+
+/**
+ * Searches a transcript to see if any table keywords appear
+ */
+export const parseTableName = (transcript, tables) => {
+  for (var i = 0; i < tables.length; i++) {
+    let table = tables[i]
+    for (var j = 0; j < table.keywords.length; j++) {
+      if (transcript.indexOf(table.keywords[j]) !== -1) {
+        return table.tableName
+      }
+    }
+  }
+  return undefined
+}
+
+export const parseTranscript = (transcript, tables) => {
+  // let lowered = transcript.toLowerCase()
+  // if (transcript.includes("reset transcript")) {
+  //   this.props.resetTranscript()
+  // } else {
+  //   let tableName = this.parseTableName(transcript)
+  //   let dates = parseDates(transcript)
+  //   // TODO: update state...
+  //   if (tableName && dates[0] && dates[1]) {
+  //     this.fetchVocalizationFromBackend(tableName, dates[0], dates[1])
+  //   }
+  // }
 }

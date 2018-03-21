@@ -24,10 +24,6 @@ class UserStudy extends Component {
     }
   }
 
-  componentDidMount() {
-    window.speechSynthesis.getVoices();
-  }
-
   setTimeRange = (values) => {
     this.setState({
       range: values

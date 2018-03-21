@@ -4,9 +4,7 @@ import {
   NavbarGroup,
   NavbarHeading,
   NavbarDivider,
-  Button,
 } from '@blueprintjs/core';
-import { Link } from 'react-router-dom';
 import logo from './cornell_logo.png';
 
 class CiceroNavbar extends Component {

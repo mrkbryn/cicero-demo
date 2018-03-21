@@ -31,7 +31,6 @@ class DataCards extends Component {
           <Col>
             <DataCard
               table={table}
-              selected={table.tableName === this.props.selectedTable}
             />
           </Col>
         </div>

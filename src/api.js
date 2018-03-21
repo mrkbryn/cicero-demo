@@ -9,14 +9,16 @@ export const fetchGetRelationMetadata = () => {
   })
 }
 
-export const fetchVocalization = (table, startDate, endDate) => {
+export const fetchVocalization = (tableName, startDate, endDate) => {
   let body = JSON.stringify({
-    relationName: table.tableName,
+    tableName: tableName,
     startDate: startDate,
     endDate: endDate,
   });
 
   let url = `${api_url}/query/timeseries`;
+
+  console.log(body)
 
   return fetch(url, {
     method: 'PUT',
@@ -25,24 +27,4 @@ export const fetchVocalization = (table, startDate, endDate) => {
       'Content-Type': 'application/json'
     })
   })
-  // .then(response => response.json())
-  // .then(json => {
-  //   if (json.error) {
-  //     this.setState({ fetchResult: { fetching: false, error: json.message }});
-  //   } else {
-  //     this.setState({ fetchResult: { fetching: false }});
-  //
-  //     if (this.state.mode === 'vocalization') {
-  //       this.handleVocalizationResult(json);
-  //     } else if (this.state.mode === 'sonification') {
-  //       this.handleSonificationResult(json);
-  //     } else if (this.state.mode === 'visualization') {
-  //       this.handleVisualizationResult(json);
-  //     }
-  //   }
-  // })
-  // .catch(error => {
-  //   console.log(error);
-  //   this.setState({ fetchResult: { fetching: false, error: 'We were unable to connect to CiceroDB' }});
-  // });
 }
