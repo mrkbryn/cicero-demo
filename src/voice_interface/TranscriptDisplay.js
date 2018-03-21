@@ -10,8 +10,8 @@ class TranscriptDisplay extends Component {
   render() {
     if (this.props.finalTranscript === '' && this.props.interimTranscript === '') {
       return (
-        <div className="pt-ui-text-large" style={{ margin: "10px", color: 'grey' }}>
-          <p>Begin speaking to see speech recognition here...</p>
+        <div className="pt-ui-text-large" style={{ margin: "40px", color: 'grey' }}>
+          <p>Hey Cicero...</p>
         </div>
       )
     }
