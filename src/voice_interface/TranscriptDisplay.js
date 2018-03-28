@@ -17,8 +17,8 @@ class TranscriptDisplay extends Component {
     }
 
     return (
-      <div className="pt-ui-text-large" style={{ margin: "10px" }}>
-        <span style={{ color: 'black', paddingRight: '3px' }}>{this.props.finalTranscript}</span><span style={{ color: 'grey' }}>{this.props.interimTranscript}</span>
+      <div className="pt-ui-text-large" style={{ margin: "40px" }}>
+        <p>{this.props.finalTranscript} {this.props.interimTranscript}</p>
       </div>
     )
   }

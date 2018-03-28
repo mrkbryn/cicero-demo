@@ -1,4 +1,5 @@
 let MONTH_YEAR_REGEX = /(january|february|march|april|may|june|july|august|september|october|november|december) ([0-9]{4})/g;
+// let TWO_YEAR_REGEX = /[0-9{4}] [0-9]/g;
 
 export const parseDates = transcript => {
   // TODO: use other REGEX to detect date speech patterns, i.e. "during 2012", "from 2012 to 2013"

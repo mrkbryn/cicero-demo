@@ -9,14 +9,12 @@ export const fetchGetRelationMetadata = () => {
   })
 }
 
-export const fetchVocalization = (tableName, startDate, endDate) => {
+export const fetchVocalization = (command) => {
   let body = JSON.stringify({
-    tableName: tableName,
-    startDate: startDate,
-    endDate: endDate,
+    command: command
   });
 
-  let url = `${api_url}/query/timeseries`;
+  let url = `${api_url}/query/new`;
 
   console.log(body)
 

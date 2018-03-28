@@ -5,7 +5,6 @@ import SpeechRecognition from 'react-speech-recognition'
 import DataCards from './DataCards'
 import TranscriptDisplay from './TranscriptDisplay'
 import { fetchGetRelationMetadata, fetchVocalization } from '../api'
-import { parseDates, parseTableName } from './speechRecognition'
 import SuggestedUse from './SuggestedUse'
 import VocalizationFetch from './VocalizationFetch'
 
@@ -20,24 +19,14 @@ class VoiceInterface extends Component {
       vocalizationFetch: {
         fetching: false
       }
-      // var synth = window.speechSynthesis;
-      // var voices = synth.getVoices();
-      // var voiceOutput = new SpeechSynthesisUtterance(msg);
-      // for (var i = 0; i < voices.length; i++) {
-      //   if (voices[i].voiceURI === 'Google UK English Female') {
-      //     voiceOutput.voice = voices[i];
-      //     break;
-      //   }
-      // }
-      // synth.speak(voiceOutput);
     }
 
     var SpeechGrammarList = window.webkitSpeechGrammarList
     if (SpeechGrammarList) {
       var grammar = '#JSGF V1.0; grammar name; public <name> = cicero ;'
-      var speechRecognitionList = new SpeechGrammarList();
-      speechRecognitionList.addFromString(grammar, 1);
-      this.props.recognition.grammars = speechRecognitionList;
+      var speechRecognitionList = new SpeechGrammarList()
+      speechRecognitionList.addFromString(grammar, 1)
+      this.props.recognition.grammars = speechRecognitionList
     }
   }
 
@@ -51,41 +40,29 @@ class VoiceInterface extends Component {
         } else {
           this.setState({ tablesFetch: { fetching: false }, tables: json })
         }
-        this.props.resetTranscript()
       })
   }
 
   componentWillReceiveProps(props) {
     if (props.finalTranscript !== this.props.finalTranscript) {
-      this.parseTranscript(props.finalTranscript)
-    }
-  }
-
-  parseTranscript = (finalTranscript) => {
-    var transcript = finalTranscript.toLowerCase();
-    if (transcript.indexOf("reset transcript") !== -1) {
-      console.log('resetting transcript')
+      this.checkForCommand(props.finalTranscript.toLowerCase())
       this.props.resetTranscript()
-    } else {
-      let tableName = parseTableName(transcript, this.state.tables)
-      let dates = parseDates(transcript)
-      console.log(tableName, dates)
-      if (tableName && dates[0] && dates[1]) {
-        this.fetchVocalizationFromBackend(tableName, dates[0], dates[1])
-      }
     }
   }
 
-  parseDates = transcript => {
-    this.setState({ dateRange: parseDates(transcript) })
+  checkForCommand(transcript) {
+    let startOfCommand = transcript.indexOf('cicero')
+    if (startOfCommand !== -1) {
+      let command = transcript.substring(startOfCommand)
+      this.fetchVocalizationFromBackend(command)
+    }
   }
 
-  fetchVocalizationFromBackend = (tableName, startDate, endDate) => {
-    this.setState({ vocalizationFetch: { fetching: true }})
-    fetchVocalization(tableName, startDate, endDate)
+  fetchVocalizationFromBackend = (command) => {
+    this.setState({ vocalizationFetch: { fetching: true, command }})
+    fetchVocalization(command)
     .then(response => response.json())
     .then(json => {
-      console.log(json)
       if (json.error) {
         this.setState({ vocalizationFetch: { fetching: false, error: json.message }})
       } else {
@@ -95,13 +72,14 @@ class VoiceInterface extends Component {
         var voiceOutput = new SpeechSynthesisUtterance(json.vocalization);
         for (var i = 0; i < voices.length; i++) {
           if (voices[i].voiceURI === 'Google UK English Female') {
-            voiceOutput.voice = voices[i];
+            voiceOutput.voice = voices[i]
             break;
           }
         }
-        voiceOutput.onstart = this.props.stopListening
+        voiceOutput.onstart = () => {
+          this.props.stopListening()
+        }
         voiceOutput.onend = () => {
-          this.props.resetTranscript()
           this.props.startListening()
         }
         synth.speak(voiceOutput);
