@@ -31,6 +31,17 @@ class VoiceInterface extends Component {
   }
 
   componentDidMount() {
+    this.populateRelationMetadata()
+  }
+
+  componentWillReceiveProps(props) {
+    if (props.finalTranscript !== this.props.finalTranscript) {
+      this.checkForCommand(props.finalTranscript.toLowerCase())
+      this.props.resetTranscript()
+    }
+  }
+
+  populateRelationMetadata() {
     this.setState({ tablesFetch: { fetching: true }})
     fetchGetRelationMetadata()
       .then(response => response.json())
@@ -41,13 +52,9 @@ class VoiceInterface extends Component {
           this.setState({ tablesFetch: { fetching: false }, tables: json })
         }
       })
-  }
-
-  componentWillReceiveProps(props) {
-    if (props.finalTranscript !== this.props.finalTranscript) {
-      this.checkForCommand(props.finalTranscript.toLowerCase())
-      this.props.resetTranscript()
-    }
+      .catch(() => {
+        this.setState({ tablesFetch: { fetching: false, error: 'Failed to fetch database metadata from CiceroDB' }})
+      })
   }
 
   checkForCommand(transcript) {
@@ -84,6 +91,9 @@ class VoiceInterface extends Component {
         }
         synth.speak(voiceOutput);
       }
+    })
+    .catch(error => {
+      console.log('error...')
     })
   }
 

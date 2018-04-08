@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { Col, Row } from 'react-bootstrap';
 import DataCard from './DataCard'
-import { Spinner } from '@blueprintjs/core'
+import { Spinner, NonIdealState } from '@blueprintjs/core'
 
 class DataCards extends Component {
   render() {
@@ -18,6 +18,18 @@ class DataCards extends Component {
               <p style={{ color: "grey" }}>Loading table information...</p>
             </Col>
           </Row>
+        </div>
+      )
+    }
+
+    if (this.props.tablesFetch.error) {
+      return (
+        <div>
+          <NonIdealState
+            title="Error"
+            description="Failed to fetch table information from CiceroDB"
+            visual="pt-icon-error"
+          />
         </div>
       )
     }
