@@ -34,7 +34,6 @@ class DataCards extends Component {
       )
     }
 
-    // TODO: move selected tables to state so we can trigger a rerender
     let cards = []
     for (var i = 0; i < this.props.tables.length; i++) {
       let table = this.props.tables[i];

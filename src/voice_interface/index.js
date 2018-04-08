@@ -2,20 +2,15 @@ import React, { Component } from 'react'
 import NotChromeWarning from '../common/NotChromeWarning'
 import { Row, Col } from 'react-bootstrap'
 import SpeechRecognition from 'react-speech-recognition'
-import DataCards from './DataCards'
 import TranscriptDisplay from './TranscriptDisplay'
-import { fetchGetRelationMetadata, fetchVocalization } from '../api'
-import SuggestedUse from './SuggestedUse'
 import VocalizationFetch from './VocalizationFetch'
+import UsageDisplay from './UsageDisplay'
+import { fetchVocalization } from '../api'
 
 class VoiceInterface extends Component {
   constructor(props) {
     super(props)
     this.state = {
-      tablesFetch: {
-        fetching: false,
-      },
-      tables: [],
       vocalizationFetch: {
         fetching: false
       }
@@ -30,31 +25,11 @@ class VoiceInterface extends Component {
     }
   }
 
-  componentDidMount() {
-    this.populateRelationMetadata()
-  }
-
   componentWillReceiveProps(props) {
     if (props.finalTranscript !== this.props.finalTranscript) {
       this.checkForCommand(props.finalTranscript.toLowerCase())
       this.props.resetTranscript()
     }
-  }
-
-  populateRelationMetadata() {
-    this.setState({ tablesFetch: { fetching: true }})
-    fetchGetRelationMetadata()
-      .then(response => response.json())
-      .then(json => {
-        if (json.error) {
-          this.setState({ tablesFetch: { fetching: false, error: json.message }})
-        } else {
-          this.setState({ tablesFetch: { fetching: false }, tables: json })
-        }
-      })
-      .catch(() => {
-        this.setState({ tablesFetch: { fetching: false, error: 'Failed to fetch database metadata from CiceroDB' }})
-      })
   }
 
   checkForCommand(transcript) {
@@ -101,15 +76,7 @@ class VoiceInterface extends Component {
     return (
       <div style={{ margin: "20px", align: "left" }}>
         <NotChromeWarning />
-
-        <DataCards
-          tablesFetch={this.state.tablesFetch}
-          tables={this.state.tables}
-          selectedTable={this.state.selectedTable}
-        />
-
-        <SuggestedUse />
-
+        <UsageDisplay />
         <Row>
           <Col md={12}>
             <TranscriptDisplay
@@ -118,7 +85,6 @@ class VoiceInterface extends Component {
             />
           </Col>
         </Row>
-
         <VocalizationFetch
           vocalizationFetch={this.state.vocalizationFetch}
         />

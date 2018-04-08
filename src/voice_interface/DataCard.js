@@ -6,7 +6,7 @@ class DataCard extends Component {
     let table = this.props.table
     // TODO: add div {table.earliestDate.toDateString()} <Icon iconName="arrow-right" iconSize={20} /> {table.latestDate.toDateString()}
     return (
-      <div key={table.tableName} style={{ margin: "10px" }}>
+      <div style={{ margin: "10px" }}>
           <Card elevation={0}>
             <h5>{table.tableName}</h5>
             <p>{table.description}</p>
