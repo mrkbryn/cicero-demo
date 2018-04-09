@@ -1,13 +1,39 @@
 import React, { Component } from 'react'
-import NotChromeWarning from '../common/NotChromeWarning'
-import { Row, Col } from 'react-bootstrap'
 import SpeechRecognition from 'react-speech-recognition'
-import TranscriptDisplay from './TranscriptDisplay'
-import VocalizationFetch from './VocalizationFetch'
-import UsageDisplay from './UsageDisplay'
-import QueryInputComponent from './QueryInputComponent'
-import { fetchVocalization } from '../api'
 
+class SpeechQueryInputComponent extends Component {
+  // constructor(props) {
+  //   super(props)
+  //   var SpeechGrammarList = window.webkitSpeechGrammarList
+  //   if (SpeechGrammarList) {
+  //     var grammar = '#JSGF V1.0; grammar name; public <name> = cicero ;'
+  //     var speechRecognitionList = new SpeechGrammarList()
+  //     speechRecognitionList.addFromString(grammar, 1)
+  //     this.props.recognition.grammars = speechRecognitionList
+  //   }
+  // }
+  //
+  // componentWillReceiveProps(props) {
+  //   if (props.finalTranscript !== this.props.finalTranscript) {
+  //     this.checkForCommand(props.finalTranscript.toLowerCase())
+  //     this.props.resetTranscript()
+  //   }
+  // }
+
+  render() {
+    return (
+      <div>
+        <p>speech query input component</p>
+      </div>
+    )
+  }
+}
+
+export default SpeechQueryInputComponent
+// export default SpeechRecognition(SpeechQueryInputComponent)
+
+
+/*
 class VoiceInterface extends Component {
   constructor(props) {
     super(props)
@@ -49,8 +75,7 @@ class VoiceInterface extends Component {
       if (json.error) {
         this.setState({ vocalizationFetch: { fetching: false, error: json.message }})
       } else {
-        console.log(json)
-        this.setState({ vocalizationFetch: { fetching: false, result: json }})
+        this.setState({ vocalizationFetch: { fetching: false, vocalization: json.vocalization }})
         var synth = window.speechSynthesis;
         var voices = synth.getVoices();
         var voiceOutput = new SpeechSynthesisUtterance(json.vocalization);
@@ -97,3 +122,6 @@ class VoiceInterface extends Component {
 }
 
 export default SpeechRecognition(VoiceInterface)
+
+
+*/

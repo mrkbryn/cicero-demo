@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
 import { Spinner, Callout } from '@blueprintjs/core'
 import { Row, Col } from 'react-bootstrap'
+import QueryDisplay from './QueryDisplay'
 
 /**
  * Displays a loading spinner or error depending on the state of the vocalization fetch
@@ -43,6 +44,17 @@ class VocalizationFetch extends Component {
               </Callout>
             </Col>
           </Row>
+        </div>
+      )
+    }
+
+    if (this.props.vocalizationFetch.result) {
+      let result = this.props.vocalizationFetch.result
+      return (
+        <div>
+          <p>Request took {result.executionTimeMillis} milliseconds</p>
+          <p>Successful: {result.successful}</p>
+          <QueryDisplay query={result.query} />
         </div>
       )
     }
