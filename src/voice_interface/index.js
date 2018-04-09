@@ -4,7 +4,7 @@ import { Row, Col } from 'react-bootstrap'
 import SpeechRecognition from 'react-speech-recognition'
 import TranscriptDisplay from './TranscriptDisplay'
 import VocalizationFetch from './VocalizationFetch'
-import UsageDisplay from './UsageDisplay'
+import SuggestedUse from './SuggestedUse'
 import QueryInputComponent from './QueryInputComponent'
 import { fetchVocalization } from '../api'
 
@@ -78,7 +78,7 @@ class VoiceInterface extends Component {
     return (
       <div style={{ margin: "20px", align: "left" }}>
         <NotChromeWarning />
-        <UsageDisplay />
+        <SuggestedUse />
         <QueryInputComponent />
         <Row>
           <Col md={12}>

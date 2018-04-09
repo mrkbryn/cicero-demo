@@ -1,15 +1,8 @@
 import React, { Component } from 'react'
 import DataCards from './DataCards'
-import SuggestedUse from './SuggestedUse'
 import { fetchGetRelationMetadata } from '../api'
 
-/**
- * Displays metadata about what is stored in the backend database as well
- * as how to formulate natural language queries about the database data.
- * Also, displays any errors encountered while attempting to retrieve the
- * metadata from the backend.
- */
-class UsageDisplay extends Component {
+class InfoPage extends Component {
   constructor(props) {
     super(props)
     this.state = {
@@ -42,15 +35,15 @@ class UsageDisplay extends Component {
 
   render() {
     return (
-      <div>
+      <div style={{ margin: "20px", align: "left" }}>
+        <h3>Info</h3>
         <DataCards
           tablesFetch={this.state.tablesFetch}
           tables={this.state.tables}
         />
-        <SuggestedUse />
       </div>
     )
   }
 }
 
-export default UsageDisplay
+export default InfoPage

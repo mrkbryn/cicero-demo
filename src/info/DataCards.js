@@ -49,7 +49,6 @@ class DataCards extends Component {
     }
     return (
       <div className="data-cards">
-        <h3>Available Datasets</h3>
         <Row>
           {cards}
         </Row>

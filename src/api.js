@@ -12,9 +12,9 @@ export const fetchGetRelationMetadata = () => {
 export const fetchVocalization = (command) => {
   let body = JSON.stringify({
     command: command
-  });
+  })
 
-  let url = `${api_url}/query/new`;
+  let url = `${api_url}/query/new`
 
   console.log(body)
 
