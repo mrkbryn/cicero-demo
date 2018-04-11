@@ -1,8 +1,5 @@
 import React, { Component } from 'react'
 import NotChromeWarning from '../common/NotChromeWarning'
-import { Row, Col } from 'react-bootstrap'
-import SpeechRecognition from 'react-speech-recognition'
-import TranscriptDisplay from './TranscriptDisplay'
 import VocalizationFetch from './VocalizationFetch'
 import SuggestedUse from './SuggestedUse'
 import QueryInputComponent from './QueryInputComponent'
@@ -15,29 +12,6 @@ class VoiceInterface extends Component {
       vocalizationFetch: {
         fetching: false
       }
-    }
-
-    var SpeechGrammarList = window.webkitSpeechGrammarList
-    if (SpeechGrammarList) {
-      var grammar = '#JSGF V1.0; grammar name; public <name> = cicero ;'
-      var speechRecognitionList = new SpeechGrammarList()
-      speechRecognitionList.addFromString(grammar, 1)
-      this.props.recognition.grammars = speechRecognitionList
-    }
-  }
-
-  componentWillReceiveProps(props) {
-    if (props.finalTranscript !== this.props.finalTranscript) {
-      this.checkForCommand(props.finalTranscript.toLowerCase())
-      this.props.resetTranscript()
-    }
-  }
-
-  checkForCommand(transcript) {
-    let startOfCommand = transcript.indexOf('cicero')
-    if (startOfCommand !== -1) {
-      let command = transcript.substring(startOfCommand)
-      this.fetchVocalizationFromBackend(command)
     }
   }
 
@@ -60,17 +34,17 @@ class VoiceInterface extends Component {
             break;
           }
         }
-        voiceOutput.onstart = () => {
-          this.props.stopListening()
-        }
-        voiceOutput.onend = () => {
-          this.props.startListening()
-        }
+        // voiceOutput.onstart = () => {
+        //   this.props.stopListening()
+        // }
+        // voiceOutput.onend = () => {
+        //   this.props.startListening()
+        // }
         synth.speak(voiceOutput);
       }
     })
     .catch(error => {
-      console.log('error...')
+      console.log(error)
     })
   }
 
@@ -82,14 +56,6 @@ class VoiceInterface extends Component {
         <QueryInputComponent
           fetchVocalizationFromBackend={this.fetchVocalizationFromBackend}
         />
-        <Row>
-          <Col md={12}>
-            <TranscriptDisplay
-              finalTranscript={this.props.finalTranscript}
-              interimTranscript={this.props.interimTranscript}
-            />
-          </Col>
-        </Row>
         <VocalizationFetch
           vocalizationFetch={this.state.vocalizationFetch}
         />
@@ -98,4 +64,4 @@ class VoiceInterface extends Component {
   }
 }
 
-export default SpeechRecognition(VoiceInterface)
+export default VoiceInterface

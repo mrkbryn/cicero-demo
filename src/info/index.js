@@ -1,5 +1,6 @@
 import React, { Component } from 'react'
-import DataCards from './DataCards'
+import TableMetadataComponent from './TableMetadataComponent'
+import { NonIdealState } from '@blueprintjs/core'
 import { fetchGetRelationMetadata } from '../api'
 
 class InfoPage extends Component {
@@ -34,13 +35,23 @@ class InfoPage extends Component {
   }
 
   render() {
+    if (this.state.tablesFetch.error) {
+      return (
+        <div style={{ margin: "20px" }}>
+          <NonIdealState
+            title="Error"
+            description="Failed to fetch table information from CiceroDB"
+            visual="pt-icon-error"
+          />
+        </div>
+      )
+    }
+
     return (
       <div style={{ margin: "20px", align: "left" }}>
-        <h3>Info</h3>
-        <DataCards
-          tablesFetch={this.state.tablesFetch}
-          tables={this.state.tables}
-        />
+        {
+          this.state.tables.map(table => <TableMetadataComponent key={table.tableName} {...table} />)
+        }
       </div>
     )
   }
