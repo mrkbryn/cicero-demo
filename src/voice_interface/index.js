@@ -79,7 +79,9 @@ class VoiceInterface extends Component {
       <div style={{ margin: "20px", align: "left" }}>
         <NotChromeWarning />
         <SuggestedUse />
-        <QueryInputComponent />
+        <QueryInputComponent
+          fetchVocalizationFromBackend={this.fetchVocalizationFromBackend}
+        />
         <Row>
           <Col md={12}>
             <TranscriptDisplay

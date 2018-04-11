@@ -10,7 +10,11 @@ class TextQueryInputComponent extends Component {
   }
 
   onClick = () => {
-    console.log('running command: ', this.state.value)
+    this.props.executeCommand(this.state.value)
+  }
+
+  clearInput = () => {
+    this.setState({ value: '' })
   }
 
   onChange = e => {
@@ -29,6 +33,11 @@ class TextQueryInputComponent extends Component {
           onClick={this.onClick}
         >
           Run Command
+        </Button>
+        <Button
+          onClick={this.clearInput}
+        >
+        Clear Input
         </Button>
       </div>
     )

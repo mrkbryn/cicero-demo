@@ -15,15 +15,23 @@ class QueryInputComponent extends Component {
     this.setState({ voiceInputEnabled: !this.state.voiceInputEnabled })
   }
 
+  executeCommand = command => {
+    this.props.fetchVocalizationFromBackend(command)
+  }
+
   render() {
     let inputComponent = null
     if (this.state.voiceInputEnabled) {
       inputComponent = (
-        <SpeechQueryInputComponent />
+        <SpeechQueryInputComponent
+          executeCommand={this.executeCommand}
+        />
       )
     } else {
       inputComponent = (
-        <TextQueryInputComponent />
+        <TextQueryInputComponent
+          executeCommand={this.executeCommand}
+        />
       )
     }
 
