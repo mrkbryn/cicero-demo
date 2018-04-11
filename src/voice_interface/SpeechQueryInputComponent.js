@@ -20,7 +20,7 @@ class SpeechQueryInputComponent extends Component {
 
   componentDidUpdate(prevProps, prevState) {
     if (this.props.finalTranscript !== prevProps.finalTranscript) {
-      this._validateAndExecuteCommand(this.props.finalTranscript)
+      this._validateAndExecuteCommand()
     }
   }
 
@@ -30,8 +30,8 @@ class SpeechQueryInputComponent extends Component {
     if (startOfCommand !== -1) {
       let command = transcript.substring(startOfCommand)
       this.props.executeCommand(command)
+      this.props.resetTranscript()
     }
-    this.props.resetTranscript()
   }
 
   render() {
