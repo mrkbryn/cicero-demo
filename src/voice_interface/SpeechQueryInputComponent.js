@@ -6,17 +6,6 @@ import SpeechRecognition from 'react-speech-recognition'
  * transcripts, and dispatching commands to parent component
  */
 class SpeechQueryInputComponent extends Component {
-  constructor(props) {
-    super(props)
-    var SpeechGrammarList = window.webkitSpeechGrammarList
-    if (SpeechGrammarList) {
-      var grammar = '#JSGF V1.0; grammar name; public <name> = cicero ;'
-      var speechRecognitionList = new SpeechGrammarList()
-      speechRecognitionList.addFromString(grammar, 1)
-      this.props.recognition.grammars = speechRecognitionList
-    }
-  }
-
   componentDidUpdate(prevProps, prevState) {
     console.log('componentDidUpdate: ', prevProps, this.props)
     if (this.props.finalTranscript !== prevProps.finalTranscript) {
@@ -50,7 +39,7 @@ class SpeechQueryInputComponent extends Component {
   render() {
     return (
       <div>
-        <p>{this.props.transcript}</p>
+        <p style={{ fontFamily: "'Roboto', sans-sarif", fontSize: "14pt" }}>{this.props.transcript}</p>
       </div>
     )
   }

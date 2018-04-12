@@ -1,25 +1,22 @@
 import React, { Component } from 'react'
+import { Tag, Icon } from '@blueprintjs/core'
+
+const months = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December']
+
+const formatQueryDate = d => {
+  let date = new Date(d)
+  return `${months[date.getMonth()]} ${date.getDate()}, ${date.getFullYear()}`
+}
 
 class QueryDisplay extends Component {
   render() {
-    let query = this.props.query
-    if (query) {
-      return (
-        <div>
-          <h5>Query Object</h5>
-          <p>Table Name: {query.tableName}</p>
-          <p>Column Name: {query.columnName}</p>
-          <p>Aggregate: {query.aggregate !== null ? query.aggregate : 'null'}</p>
-          <p>Start Date: {new Date(query.startDate).toDateString()}</p>
-          <p>End Date: {new Date(query.endDate).toDateString()}</p>
-          <p className="pt-monospace-text">{query.fullDataQuery}</p>
-        </div>
-      )
-    }
-
     return (
-      <div>
-        <p>Couldn't detect a valid query</p>
+      <div className="center">
+        <h5>Query on <span className="pt-monospace-text">{this.props.tableName}</span></h5>
+        <Tag className="pt-intent-primary pt-large">{formatQueryDate(this.props.startDate)}</Tag><Icon iconName="pt-icon-arrow-right" /><Tag className="pt-intent-primary pt-large">{formatQueryDate(this.props.endDate)}</Tag>
+        <p>Column Name: {this.props.columnName}</p>
+        <p>Aggregate: {this.props.aggregate !== null ? this.props.aggregate : 'null'}</p>
+        <p className="pt-monospace-text pt-ui-text-large">{this.props.fullDataQuery}</p>
       </div>
     )
   }

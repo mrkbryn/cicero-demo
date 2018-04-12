@@ -53,9 +53,11 @@ class VocalizationFetch extends Component {
       let result = this.props.vocalizationFetch.result
       return (
         <div>
-          <p>Request took {result.executionTimeMillis} milliseconds</p>
-          <p>Successful: {result.successful}</p>
-          <QueryDisplay query={result.query} />
+          <p style={{ textAlign: "right", color: "grey" }}>Request took {result.executionTimeMillis} milliseconds</p>
+          {result.query ?
+            <QueryDisplay {...result.query} /> :
+            <p>Oops! Your query was invalid.</p>
+          }
           <SampledTimesDisplay sampledTimes={result.sampledTimes} />
         </div>
       )
