@@ -30,11 +30,13 @@ class TextQueryInputComponent extends Component {
           onChange={this.onChange}
         />
         <Button
+          style={{ margin: "5px" }}
           onClick={this.onClick}
         >
           Run Command
         </Button>
         <Button
+          style={{ margin: "5px" }}
           onClick={this.clearInput}
         >
         Clear Input

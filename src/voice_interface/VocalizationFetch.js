@@ -2,6 +2,7 @@ import React, { Component } from 'react'
 import { Spinner, Callout } from '@blueprintjs/core'
 import { Row, Col } from 'react-bootstrap'
 import QueryDisplay from './QueryDisplay'
+import SampledTimesDisplay from './SampledTimesDisplay'
 
 /**
  * Displays a loading spinner or error depending on the state of the vocalization fetch
@@ -55,6 +56,7 @@ class VocalizationFetch extends Component {
           <p>Request took {result.executionTimeMillis} milliseconds</p>
           <p>Successful: {result.successful}</p>
           <QueryDisplay query={result.query} />
+          <SampledTimesDisplay sampledTimes={result.sampledTimes} />
         </div>
       )
     }

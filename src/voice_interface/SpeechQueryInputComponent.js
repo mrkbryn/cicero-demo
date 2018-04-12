@@ -1,6 +1,5 @@
 import React, { Component } from 'react'
 import SpeechRecognition from 'react-speech-recognition'
-import TranscriptDisplay from './TranscriptDisplay'
 
 /*
  * Lightweight component for recognizing speech input, displaying
@@ -19,9 +18,20 @@ class SpeechQueryInputComponent extends Component {
   }
 
   componentDidUpdate(prevProps, prevState) {
+    console.log('componentDidUpdate: ', prevProps, this.props)
     if (this.props.finalTranscript !== prevProps.finalTranscript) {
       this._validateAndExecuteCommand()
     }
+  }
+
+  onStartSpeaking = () => {
+    console.log('onStartSpeaking')
+    this.props.stopListening()
+  }
+
+  onStopSpeaking = () => {
+    console.log('onStopSpeaking')
+    this.props.startListening()
   }
 
   _validateAndExecuteCommand() {
@@ -29,8 +39,11 @@ class SpeechQueryInputComponent extends Component {
     let startOfCommand = transcript.indexOf('cicero')
     if (startOfCommand !== -1) {
       let command = transcript.substring(startOfCommand)
-      this.props.executeCommand(command)
+      console.log('executing command: ', command)
+      this.props.executeCommand(command, this.onStartSpeaking, this.onStopSpeaking)
+      console.log('resetting transcript.')
       this.props.resetTranscript()
+      console.log('done resetting transcript')
     }
   }
 

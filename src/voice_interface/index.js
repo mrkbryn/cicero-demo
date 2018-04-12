@@ -15,7 +15,7 @@ class VoiceInterface extends Component {
     }
   }
 
-  fetchVocalizationFromBackend = (command) => {
+  fetchVocalizationFromBackend = (command, onStartSpeaking = () => {}, onStopSpeaking = () => {}) => {
     this.setState({ vocalizationFetch: { fetching: true, command }})
     fetchVocalization(command)
     .then(response => response.json())
@@ -34,12 +34,14 @@ class VoiceInterface extends Component {
             break;
           }
         }
-        // voiceOutput.onstart = () => {
-        //   this.props.stopListening()
-        // }
-        // voiceOutput.onend = () => {
-        //   this.props.startListening()
-        // }
+        voiceOutput.onstart = (event) => {
+          // this.props.stopListening()
+          onStartSpeaking()
+        }
+        voiceOutput.onend = (event) => {
+          // this.props.startListening()
+          onStopSpeaking()
+        }
         synth.speak(voiceOutput);
       }
     })
