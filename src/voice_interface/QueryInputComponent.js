@@ -15,8 +15,8 @@ class QueryInputComponent extends Component {
     this.setState({ voiceInputEnabled: !this.state.voiceInputEnabled })
   }
 
-  executeCommand = command => {
-    this.props.fetchVocalizationFromBackend(command)
+  executeCommand = (command, onStartExecutingCommand = () => {}, onEndExecutingCommand = () => {}) => {
+    this.props.fetchVocalizationFromBackend(command, onStartExecutingCommand, onEndExecutingCommand)
   }
 
   render() {

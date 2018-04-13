@@ -9,6 +9,15 @@ export const fetchGetRelationMetadata = () => {
   })
 }
 
+export const fetchUniversalQueryFragments = () => {
+  return fetch(`${api_url}/query/fragments`, {
+    method: 'GET',
+    headers: new Headers({
+      'Content-Type': 'application/json'
+    })
+  })
+}
+
 export const fetchVocalization = (command) => {
   let body = JSON.stringify({
     command: command

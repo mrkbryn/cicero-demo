@@ -6,21 +6,36 @@ import SpeechRecognition from 'react-speech-recognition'
  * transcripts, and dispatching commands to parent component
  */
 class SpeechQueryInputComponent extends Component {
+  constructor(props) {
+    super(props)
+    this.state = {
+      executingCommand: false
+    }
+  }
+
   componentDidUpdate(prevProps, prevState) {
-    console.log('componentDidUpdate: ', prevProps, this.props)
     if (this.props.finalTranscript !== prevProps.finalTranscript) {
       this._validateAndExecuteCommand()
     }
   }
 
-  onStartSpeaking = () => {
-    console.log('onStartSpeaking')
+  componentDidMount() {
+    this.props.startListening()
+  }
+
+  componentWillUnmount() {
     this.props.stopListening()
   }
 
-  onStopSpeaking = () => {
-    console.log('onStopSpeaking')
-    this.props.startListening()
+  onStartExecutingCommand = () => {
+    console.log('onStartExecutingCommand')
+    this.setState({ executingCommand: true })
+  }
+
+  onEndExecutingCommand = () => {
+    console.log('onEndExecutingCommand')
+    this.props.resetTranscript()
+    this.setState({ executingCommand: false })
   }
 
   _validateAndExecuteCommand() {
@@ -28,30 +43,20 @@ class SpeechQueryInputComponent extends Component {
     let startOfCommand = transcript.indexOf('cicero')
     if (startOfCommand !== -1) {
       let command = transcript.substring(startOfCommand)
-      console.log('executing command: ', command)
-      this.props.executeCommand(command, this.onStartSpeaking, this.onStopSpeaking)
-      console.log('resetting transcript.')
-      this.props.resetTranscript()
-      console.log('done resetting transcript')
+      this.props.executeCommand(command, this.onStartExecutingCommand, this.onEndExecutingCommand)
     }
   }
 
   render() {
-    if (this.props.transcript === '') {
-      return (
-        <div className="row" style={{ margin: "20px" }}>
-          <div className="col">
-            <p className="pt-ui-text-large" style={{ color: "grey" }}>Hey Cicero...</p>
-          </div>
-        </div>
-      )
-    }
+    let content = (this.state.executeCommand || (this.props.finalTranscript === '' && this.props.interimTranscript === '')) ? 'Hey Cicero...' : `${this.props.finalTranscript} ${this.props.interimTranscript}`
     return (
-      <div>
-        <p style={{ fontFamily: "'Roboto', sans-sarif", fontSize: "14pt" }}>{this.props.transcript}</p>
+      <div className="row" style={{ margin: "20px" }}>
+        <div className="col">
+          <p className="pt-ui-text-large" style={{ color: "grey" }}>{content}</p>
+        </div>
       </div>
     )
   }
 }
 
-export default SpeechRecognition(SpeechQueryInputComponent)
+export default SpeechRecognition({ autoStart: false })(SpeechQueryInputComponent)

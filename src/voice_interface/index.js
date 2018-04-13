@@ -15,13 +15,15 @@ class VoiceInterface extends Component {
     }
   }
 
-  fetchVocalizationFromBackend = (command, onStartSpeaking = () => {}, onStopSpeaking = () => {}) => {
+  fetchVocalizationFromBackend = (command, onStartExecutingCommand, onEndExecutingCommand) => {
+    onStartExecutingCommand()
     this.setState({ vocalizationFetch: { fetching: true, command }})
     fetchVocalization(command)
     .then(response => response.json())
     .then(json => {
       if (json.error) {
         this.setState({ vocalizationFetch: { fetching: false, error: json.message }})
+        onEndExecutingCommand()
       } else {
         console.log(json)
         this.setState({ vocalizationFetch: { fetching: false, result: json }})
@@ -34,19 +36,15 @@ class VoiceInterface extends Component {
             break;
           }
         }
-        voiceOutput.onstart = (event) => {
-          // this.props.stopListening()
-          onStartSpeaking()
-        }
         voiceOutput.onend = (event) => {
-          // this.props.startListening()
-          onStopSpeaking()
+          onEndExecutingCommand()
         }
         synth.speak(voiceOutput);
       }
     })
     .catch(error => {
       console.log(error)
+      onEndExecutingCommand()
     })
   }
 

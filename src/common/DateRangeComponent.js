@@ -16,6 +16,10 @@ class DateRangeComponent extends Component {
   }
 
   render() {
+    if (this.props.startDate === undefined || this.props.endDate === undefined) {
+      return null
+    }
+    
     return (
       <div>
         <Tag className="pt-intent-primary pt-large">
