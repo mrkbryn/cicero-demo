@@ -2,7 +2,10 @@ import React, { Component } from 'react'
 import {
   XYPlot,
   LineMarkSeries,
+  makeWidthFlexible
 } from 'react-vis';
+
+let FlexibleXYPlot = makeWidthFlexible(XYPlot)
 
 class SampledTimesDisplay extends Component {
   constructor(props) {
@@ -34,13 +37,13 @@ class SampledTimesDisplay extends Component {
       return (
         <div>
           <h5>Sampled Times</h5>
-          <XYPlot width={800} height={50}>
+          <FlexibleXYPlot height={50}>
             <LineMarkSeries
               onValueMouseOver={this._rememberValue}
               onValueMouseOut={this._forgetValue}
               data={data}
             />
-          </XYPlot>
+          </FlexibleXYPlot>
           {value ?
             <p>{value.toDateString()}</p> :
             null

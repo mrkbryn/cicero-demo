@@ -34,8 +34,8 @@ class VocalizationFetch extends Component {
     if (this.props.vocalizationFetch.error) {
       return (
         <div>
-          <Row>
-            <Col md={12}>
+          <div className="row">
+            <div className="col">
               <Callout
                 className="pt-intent-danger"
                 iconName="pt-icon-error"
@@ -43,8 +43,8 @@ class VocalizationFetch extends Component {
               >
                 {this.props.error}
               </Callout>
-            </Col>
-          </Row>
+            </div>
+          </div>
         </div>
       )
     }
@@ -53,12 +53,32 @@ class VocalizationFetch extends Component {
       let result = this.props.vocalizationFetch.result
       return (
         <div>
-          <p style={{ textAlign: "right", color: "grey" }}>Request took {result.executionTimeMillis} milliseconds</p>
+          <div className="row">
+            <div className="col" style={{ textAlign: "right", color: "grey" }}>
+              Request took {result.executionTimeMillis} milliseconds
+            </div>
+          </div>
           {result.query ?
             <QueryDisplay {...result.query} /> :
-            <p>Oops! Your query was invalid.</p>
+            <div>
+              <div className="row">
+                <div className="col">
+                  <Callout
+                    className="pt-intent-danger"
+                    iconName="pt-icon-error"
+                    title="Error!"
+                  >
+                    Oops! Your query was invalid
+                  </Callout>
+                </div>
+              </div>
+            </div>
           }
-          <SampledTimesDisplay sampledTimes={result.sampledTimes} />
+          <div className="row">
+            <div className="col">
+              <SampledTimesDisplay sampledTimes={result.sampledTimes} />
+            </div>
+          </div>
         </div>
       )
     }

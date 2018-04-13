@@ -1,22 +1,32 @@
 import React, { Component } from 'react'
-import { Tag, Icon } from '@blueprintjs/core'
-
-const months = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December']
-
-const formatQueryDate = d => {
-  let date = new Date(d)
-  return `${months[date.getMonth()]} ${date.getDate()}, ${date.getFullYear()}`
-}
+import DateRangeComponent from '../common/DateRangeComponent'
 
 class QueryDisplay extends Component {
   render() {
     return (
-      <div className="center">
+      <div>
         <h5>Query on <span className="pt-monospace-text">{this.props.tableName}</span></h5>
-        <Tag className="pt-intent-primary pt-large">{formatQueryDate(this.props.startDate)}</Tag><Icon iconName="pt-icon-arrow-right" /><Tag className="pt-intent-primary pt-large">{formatQueryDate(this.props.endDate)}</Tag>
-        <p>Column Name: {this.props.columnName}</p>
-        <p>Aggregate: {this.props.aggregate !== null ? this.props.aggregate : 'null'}</p>
-        <p className="pt-monospace-text pt-ui-text-large">{this.props.fullDataQuery}</p>
+        <div className="row">
+          <div className="col">
+            <DateRangeComponent
+              startDate={this.props.startDate}
+              endDate={this.props.endDate}
+            />
+          </div>
+          {this.props.aggregate &&
+            <div className="col">
+              Function: <span className="pt-monospace-text">{this.props.aggregate}</span>
+            </div>
+          }
+          <div className="col" style={{ textAlign: "right" }}>
+            <p className="pt-ui-text-large">Time Series: ({this.props.formattedTimeColumn}, {this.props.columnName})</p>
+          </div>
+        </div>
+        <div className="row">
+          <div className="col">
+            <p className="pt-monospace-text pt-ui-text-large">{this.props.fullDataQuery}</p>
+          </div>
+        </div>
       </div>
     )
   }

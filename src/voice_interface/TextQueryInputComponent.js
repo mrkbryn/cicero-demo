@@ -25,15 +25,17 @@ class TextQueryInputComponent extends Component {
     return (
       <div>
         <div className="row">
-          <TextArea
-            style={{ resize: "none" }}
-            className="pt-fill"
-            value={this.state.value}
-            onChange={this.onChange}
-          />
-        </div>
-        <div className="row" style={{ textAlign: "center" }}>
           <div className="col">
+            <TextArea
+              style={{ resize: "none" }}
+              className="pt-fill"
+              value={this.state.value}
+              onChange={this.onChange}
+            />
+          </div>
+        </div>
+        <div className="row">
+          <div className="col" style={{ textAlign: "center" }}>
             <Button style={{ margin: "5px" }} onClick={this.onClick}>Run Command</Button>
             <Button style={{ margin: "5px" }} onClick={this.clearInput}>Clear Input</Button>
           </div>

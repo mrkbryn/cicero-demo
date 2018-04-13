@@ -37,6 +37,15 @@ class SpeechQueryInputComponent extends Component {
   }
 
   render() {
+    if (this.props.transcript === '') {
+      return (
+        <div className="row" style={{ margin: "20px" }}>
+          <div className="col">
+            <p className="pt-ui-text-large" style={{ color: "grey" }}>Hey Cicero...</p>
+          </div>
+        </div>
+      )
+    }
     return (
       <div>
         <p style={{ fontFamily: "'Roboto', sans-sarif", fontSize: "14pt" }}>{this.props.transcript}</p>

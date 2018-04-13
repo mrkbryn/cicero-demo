@@ -37,13 +37,21 @@ class QueryInputComponent extends Component {
 
     return (
       <div>
-        <Switch
-          className="pt-large"
-          checked={this.state.voiceInputEnabled}
-          label="Voice Input"
-          onChange={this.onChange}
-        />
-        {inputComponent}
+        <div className="row">
+          <div className="col">
+            <Switch
+              className="pt-large"
+              checked={this.state.voiceInputEnabled}
+              label="Voice Input"
+              onChange={this.onChange}
+            />
+          </div>
+        </div>
+        <div className="row">
+          <div className="col">
+            {inputComponent}
+          </div>
+        </div>
       </div>
     )
   }
