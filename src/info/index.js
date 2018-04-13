@@ -81,7 +81,7 @@ class InfoPage extends Component {
             />
               :
             <ul>
-              {this.state.queryFragments.map(fragment => <li key={fragment.keyword}><em>"{fragment.keyword}"</em>: {fragment.type}, <span className="pt-monospace-text pt-ui-text-large">{fragment.fragment}</span></li>)}
+              {this.state.queryFragments.map(fragment => <li key={fragment.keyword}><em>"{fragment.keyword}"</em> - {fragment.type}, <span className="pt-monospace-text pt-ui-text-large">{fragment.fragment}</span></li>)}
             </ul>
           }
         </div>

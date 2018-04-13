@@ -35,7 +35,7 @@ class TableMetadataComponent extends Component {
               <h6>Query Fragments</h6>
               <ul>
                 {this.props.queryFragments.length === 0 && <li>None</li>}
-                {this.props.queryFragments.map(fragment => <li><em>"{fragment.keyword}"</em>: {fragment.type}, <span className="pt-monospace-text pt-ui-text-large">{fragment.fragment}</span></li>)}
+                {this.props.queryFragments.map(fragment => <li><em>"{fragment.keyword}"</em> - {fragment.type}, <span className="pt-monospace-text pt-ui-text-large">{fragment.fragment}</span></li>)}
               </ul>
             </div>
           </div>

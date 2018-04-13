@@ -25,7 +25,6 @@ class VoiceInterface extends Component {
         this.setState({ vocalizationFetch: { fetching: false, error: json.message }})
         onEndExecutingCommand()
       } else {
-        console.log(json)
         this.setState({ vocalizationFetch: { fetching: false, result: json }})
         var synth = window.speechSynthesis;
         var voices = synth.getVoices();

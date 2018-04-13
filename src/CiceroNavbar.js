@@ -23,9 +23,9 @@ class CiceroNavbar extends Component {
           </Link>
         </NavbarGroup>
         <NavbarGroup align="right">
-          <span>Cornell Database Group</span>
-          <NavbarDivider />
-          <span><img className="App-logo" src={logo} alt="Cornell University" /></span>
+            <span><a href="http://www.cs.cornell.edu/database/" style={{ textDecoration: 'none', color: 'inherit' }}>Cornell Database Group</a></span>
+            <NavbarDivider />
+            <span><img className="App-logo" src={logo} alt="Cornell University" /></span>
         </NavbarGroup>
       </Navbar>
     )
