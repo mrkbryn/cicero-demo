@@ -25,6 +25,7 @@ class QueryInputComponent extends Component {
       inputComponent = (
         <SpeechQueryInputComponent
           executeCommand={this.executeCommand}
+          executingCommand={this.props.executingCommand}
         />
       )
     } else {

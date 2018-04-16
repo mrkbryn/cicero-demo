@@ -54,6 +54,7 @@ class VoiceInterface extends Component {
         <SuggestedUse />
         <QueryInputComponent
           fetchVocalizationFromBackend={this.fetchVocalizationFromBackend}
+          executingCommand={this.state.vocalizationFetch.fetching}
         />
         <VocalizationFetch
           vocalizationFetch={this.state.vocalizationFetch}

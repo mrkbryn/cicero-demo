@@ -29,12 +29,13 @@ class SpeechQueryInputComponent extends Component {
 
   onStartExecutingCommand = () => {
     console.log('onStartExecutingCommand')
+    this.props.stopListening()
     this.setState({ executingCommand: true })
   }
 
   onEndExecutingCommand = () => {
     console.log('onEndExecutingCommand')
-    this.props.resetTranscript()
+    this.props.startListening()
     this.setState({ executingCommand: false })
   }
 
@@ -45,10 +46,11 @@ class SpeechQueryInputComponent extends Component {
       let command = transcript.substring(startOfCommand)
       this.props.executeCommand(command, this.onStartExecutingCommand, this.onEndExecutingCommand)
     }
+    this.props.resetTranscript()
   }
 
   render() {
-    let content = (this.state.executeCommand || (this.props.finalTranscript === '' && this.props.interimTranscript === '')) ? 'Hey Cicero...' : `${this.props.finalTranscript} ${this.props.interimTranscript}`
+    let content = (this.props.executingCommand || (this.props.finalTranscript === '' && this.props.interimTranscript === '')) ? 'Hey Cicero...' : `${this.props.finalTranscript} ${this.props.interimTranscript}`
     return (
       <div className="row" style={{ margin: "20px" }}>
         <div className="col">

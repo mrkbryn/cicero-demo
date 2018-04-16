@@ -14,11 +14,6 @@ class VocalizationFetch extends Component {
         <div>
           <Row>
             <Col md={12} style={{ textAlign: "center" }}>
-              <p>{this.props.vocalizationFetch.command}</p>
-            </Col>
-          </Row>
-          <Row>
-            <Col md={12} style={{ textAlign: "center" }}>
               <Spinner />
             </Col>
           </Row>
@@ -77,6 +72,11 @@ class VocalizationFetch extends Component {
           <div className="row">
             <div className="col">
               <SampledTimesDisplay sampledTimes={result.sampledTimes} />
+            </div>
+          </div>
+          <div className="row">
+            <div className="col">
+              <p>Number of tuples read: {result.numberOfTuplesRead}</p>
             </div>
           </div>
         </div>

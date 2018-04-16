@@ -27,6 +27,11 @@ class QueryDisplay extends Component {
             <p className="pt-monospace-text pt-ui-text-large">{this.props.fullDataQuery}</p>
           </div>
         </div>
+        <div className="row">
+          <div className="col">
+            <p>Estimated Number of Tuples in Query: {this.props.estimatedNumberOfTuples.toLocaleString()}</p>
+          </div>
+        </div>
       </div>
     )
   }
